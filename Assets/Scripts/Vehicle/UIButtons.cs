@@ -67,7 +67,7 @@ public class UIButtons : MonoBehaviour
     }
     public void ResetJoystick(BaseEventData e)
     {
-        PointerEventData Data = e as PointerEventData;
+
         PlayerPhysics.MovementTurn = 0;
         Stick.transform.localPosition = Vector3.zero;
     }

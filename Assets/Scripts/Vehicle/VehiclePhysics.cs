@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GoogleARCore;
+using GoogleARCore.Examples.Common;
 
 public class VehiclePhysics : MonoBehaviour
 {
@@ -60,6 +62,7 @@ public class VehiclePhysics : MonoBehaviour
     }
     bool CheckGrounded()
     {
+        Debug.DrawRay(transform.position, -transform.up * HoverAmount, Color.green);
         if(Physics.Raycast(transform.position, -Vector3.up, out hit, HoverAmount))
         {
             if (hit.transform.gameObject.tag.CompareTo("Ground") == 0)
@@ -71,7 +74,7 @@ public class VehiclePhysics : MonoBehaviour
     }
     Vector3 GetForwardVector()
     {
-        if(!Grounded)
+        if (!Grounded)
         {
             return transform.forward;
         }
@@ -85,7 +88,7 @@ public class VehiclePhysics : MonoBehaviour
             transform.position += GetForwardVector() * Direction * Time.deltaTime * Speed;
             if(Direction != 0)
             {
-                transform.Rotate(new Vector3(0, MovementTurn * Time.deltaTime * Mathf.Abs(Direction), 0));
+                transform.Rotate(new Vector3(0, MovementTurn * Time.deltaTime * Mathf.Abs(Direction) * 10, 0));
                // transform.rotation = new Quaternion(0, transform.rotation.y, 0, 0);
             }
         }
@@ -93,7 +96,7 @@ public class VehiclePhysics : MonoBehaviour
 
     void DebugRays()
     {
-        Debug.DrawRay(transform.position, GetForwardVector() * 2, Color.blue);
+       // Debug.DrawRay(transform.position, GetForwardVector() * 2, Color.blue);
         //Debug.DrawRay(transform.position, Vector3.forward * 2, Color.green);
     }
 }
