@@ -6,7 +6,7 @@ using GoogleARCore.Examples.Common;
 
 public class VehiclePhysics : MonoBehaviour
 {
-    //Car Movement
+    [Header("Car Mechanics")]
     float Direction = 0;
     public float MovementDirection
     {
@@ -20,7 +20,7 @@ public class VehiclePhysics : MonoBehaviour
         }
     }
 
-    public float Turn = 0;
+    float Turn = 0;
     public float MovementTurn
     {
         set
@@ -34,15 +34,27 @@ public class VehiclePhysics : MonoBehaviour
     }
 
     public float Speed;
-    //Car Physics
+
+    [Header("Car Physics")]
     public float HoverAmount;
     RaycastHit hit;
 
     Vector3 ForwardVector;
     public bool Grounded;
-	void Start ()
+
+    [Header("Car Children")]
+    public GameObject MeshOfVehicle;
+
+    void Start ()
     {
         Grounded = false;
+        if(!MeshOfVehicle)
+        {
+            if (!(MeshOfVehicle = gameObject.GetComponentInChildren<Transform>().gameObject))
+            {
+                Debug.LogError("Could not find Mesh for the vehicle");
+            }
+        }
 	}
 	
 	void Update ()
@@ -50,6 +62,7 @@ public class VehiclePhysics : MonoBehaviour
         ApplyGravity();
         Grounded = CheckGrounded();
         MoveVehicle();
+        CorrectMeshAngle();
         DebugRays();
 	}
 
@@ -57,16 +70,22 @@ public class VehiclePhysics : MonoBehaviour
     {
         if(!Grounded)
         {
-            transform.position += Physics.gravity * Time.deltaTime;
+            transform.position += Physics.gravity * Time.deltaTime * (transform.localScale.y);
         }
     }
     bool CheckGrounded()
     {
-        Debug.DrawRay(transform.position, -transform.up * HoverAmount, Color.green);
+        Debug.DrawRay(transform.position, -transform.up * HoverAmount, Color.red);
         if(Physics.Raycast(transform.position, -Vector3.up, out hit, HoverAmount))
         {
             if (hit.transform.gameObject.tag.CompareTo("Ground") == 0)
             {
+                //Correct Hover Distance
+                if(Vector3.Distance(transform.position, hit.point) < HoverAmount - 0.05f)
+                {
+                    transform.position = hit.point + new Vector3(0, HoverAmount, 0);
+                }
+
                 return true;
             }
         }
@@ -80,7 +99,6 @@ public class VehiclePhysics : MonoBehaviour
         }
         return (Vector3.Cross(hit.normal, -transform.right));
     }
-
     void MoveVehicle()
     {
         if (Grounded)
@@ -94,9 +112,17 @@ public class VehiclePhysics : MonoBehaviour
         }
     }
 
+    void CorrectMeshAngle()
+    {
+        if(MeshOfVehicle)
+        {
+            MeshOfVehicle.transform.LookAt(MeshOfVehicle.transform.position + GetForwardVector());
+        }
+    }
+
     void DebugRays()
     {
-       // Debug.DrawRay(transform.position, GetForwardVector() * 2, Color.blue);
-        //Debug.DrawRay(transform.position, Vector3.forward * 2, Color.green);
+        Debug.DrawRay(transform.position, GetForwardVector() * 2, Color.blue);//Should move
+        Debug.DrawRay(transform.position, Vector3.forward * 2, Color.green);//Its forward
     }
 }

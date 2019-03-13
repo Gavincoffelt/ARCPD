@@ -113,6 +113,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &200494069 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1066532156173820, guid: deb572801567886458700d171cf7147a,
+    type: 2}
+  m_PrefabInternal: {fileID: 1606916605}
 --- !u!1 &722215425
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,6 +362,50 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4704580863356994, guid: deb572801567886458700d171cf7147a, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0.59088737
+      objectReference: {fileID: 0}
+    - target: {fileID: 4704580863356994, guid: deb572801567886458700d171cf7147a, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4704580863356994, guid: deb572801567886458700d171cf7147a, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4704580863356994, guid: deb572801567886458700d171cf7147a, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.8067541
+      objectReference: {fileID: 0}
+    - target: {fileID: 4704580863356994, guid: deb572801567886458700d171cf7147a, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 72.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 65146392529822066, guid: deb572801567886458700d171cf7147a,
+        type: 2}
+      propertyPath: m_Size.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114921883076559304, guid: deb572801567886458700d171cf7147a,
+        type: 2}
+      propertyPath: MeshOfVehicle
+      value: 
+      objectReference: {fileID: 200494069}
+    - target: {fileID: 4135671286094866, guid: deb572801567886458700d171cf7147a, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0.839
+      objectReference: {fileID: 0}
+    - target: {fileID: 4167319431044612, guid: deb572801567886458700d171cf7147a, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0.839
+      objectReference: {fileID: 0}
+    - target: {fileID: 114921883076559304, guid: deb572801567886458700d171cf7147a,
+        type: 2}
+      propertyPath: HoverAmount
+      value: 0.2
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 65534239706658604, guid: deb572801567886458700d171cf7147a, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: deb572801567886458700d171cf7147a, type: 2}
   m_IsPrefabAsset: 0
