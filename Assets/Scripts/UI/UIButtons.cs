@@ -24,17 +24,13 @@ public class UIButtons : MonoBehaviour
 
     void Update()
     {
-        if (GasPressed || ReversePressed)
+        if (PlayerPhysics.Grounded && (GasPressed || ReversePressed))
         {
             PlayerPhysics.MovementDirection += Speed * Time.deltaTime;
         }
         else if(PlayerPhysics.MovementDirection != 0)
         {
-            PlayerPhysics.MovementDirection -= Mathf.Lerp(PlayerPhysics.MovementDirection, 0, 0.01f) * Time.deltaTime;
-            if (Mathf.Abs(PlayerPhysics.MovementDirection) < 0.1f)
-            {
-                PlayerPhysics.MovementDirection = 0;
-            }
+            PlayerPhysics.SlowVehicleDown();
         }
     }
 

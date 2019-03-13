@@ -107,11 +107,14 @@ public class VehiclePhysics : MonoBehaviour
             if(Direction != 0)
             {
                 transform.Rotate(new Vector3(0, MovementTurn * Time.deltaTime * Mathf.Abs(Direction) * 10, 0));
-               // transform.rotation = new Quaternion(0, transform.rotation.y, 0, 0);
             }
         }
+        else
+        {
+            transform.position += GetForwardVector() * Direction * Time.deltaTime * Speed;
+            SlowVehicleDown();
+        }
     }
-
     void CorrectMeshAngle()
     {
         if(MeshOfVehicle)
@@ -120,6 +123,14 @@ public class VehiclePhysics : MonoBehaviour
         }
     }
 
+    public void SlowVehicleDown()
+    {
+        MovementDirection -= Mathf.Lerp(MovementDirection, 0, 0.01f) * Time.deltaTime;
+        if (Mathf.Abs(MovementDirection) < 0.1f)
+        {
+            MovementDirection = 0;
+        }
+    }
     void DebugRays()
     {
         Debug.DrawRay(transform.position, GetForwardVector() * 2, Color.blue);//Should move

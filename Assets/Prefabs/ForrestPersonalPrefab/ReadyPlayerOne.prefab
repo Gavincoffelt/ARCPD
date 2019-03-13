@@ -743,10 +743,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40e546c39b01d044924981a2e60e5ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Turn: 0
   Speed: 1
   HoverAmount: 0.5
   Grounded: 0
+  MeshOfVehicle: {fileID: 1054570451845780}
 --- !u!114 &114616136031560598
 MonoBehaviour:
   m_ObjectHideFlags: 1
