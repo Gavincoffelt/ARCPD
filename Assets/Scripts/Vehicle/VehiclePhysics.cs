@@ -21,7 +21,7 @@ public class VehiclePhysics : MonoBehaviour
             return Direction;
         }
     }
-    public float Turn = 0;
+    float Turn = 0;
     public float MovementTurn
     {
         set
@@ -43,6 +43,9 @@ public class VehiclePhysics : MonoBehaviour
     Vector3 ForwardVector;
     public bool Grounded;
 
+    public bool CrashedFromFront;
+    public bool CrashedFromBack;
+
     [Header("Car Children")]
     public GameObject MeshOfVehicle;
 
@@ -50,13 +53,24 @@ public class VehiclePhysics : MonoBehaviour
     Animator MyAnim;
     enum ANIMATESTATES { IDLE, LeftTurn, RightTurn};
 
+
+    [Header("Temp")]
+    GameObject MainCamera;
+    GameObject CameraLocation;
+
     void Start ()
     {
+        MainCamera = GameObject.Find("Camera");
+        CameraLocation = GameObject.Find("CameraMoveTo");
+
+
         Grounded = false;
+        CrashedFromFront = false;
+        CrashedFromBack = false;
         MyAnim = GetComponent<Animator>();
         if(!MeshOfVehicle)
         {
-            if (!(gameObject.GetComponentInChildren<BoxCollider>().gameObject))
+            if (!(gameObject.GetComponentInChildren<Transform>().gameObject))
             {
                 Debug.LogError("Could not find Mesh for the vehicle");
             }
@@ -70,13 +84,29 @@ public class VehiclePhysics : MonoBehaviour
 	void Update ()
     {
         ApplyGravity();
+
         Grounded = CheckGrounded();
+
+        CrashedFromFront = CheckForCrashFromFront();
+        CrashedFromBack = CheckForCrashFromBack();
+        CheckForCrashFromTop();
+
         MoveVehicle();
         CorrectMeshAngle();
 
-        //CheckForCornerTouch();
+        TempBringCamera();
+
         DebugRays();
 	}
+
+    void TempBringCamera()
+    {
+        MainCamera.transform.LookAt(transform.position);
+        //MainCamera.gameObject.transform.position += Vector3.Lerp(MainCamera.transform.position, CameraLocation.transform.position, 0.05f);
+    }
+
+
+
 
     void ApplyGravity()
     {
@@ -88,16 +118,15 @@ public class VehiclePhysics : MonoBehaviour
     }
     bool CheckGrounded()
     {
-        if(Physics.Raycast(transform.position, -Vector3.up, out hit, HoverAmount))
+        if(Physics.Raycast(MeshOfVehicle.transform.position, -MeshOfVehicle.transform.up, out hit, HoverAmount))
         {
             if (hit.transform.gameObject.tag.CompareTo("Ground") == 0)
             {
                 //Correct Hover Distance
-                if(Vector3.Distance(transform.position, hit.point) < HoverAmount - 0.05f)
+                if (Vector3.Distance(transform.position, hit.point) < 0.1f)
                 {
-                    transform.position = hit.point + new Vector3(0, HoverAmount, 0);
+                    transform.position = hit.point + transform.up * HoverAmount;
                 }
-
                 return true;
             }
         }
@@ -109,23 +138,23 @@ public class VehiclePhysics : MonoBehaviour
         {
             return transform.forward;
         }
-        return (Vector3.Cross(hit.normal, -transform.right));
+        return (Vector3.Cross(hit.normal, -MeshOfVehicle.transform.right));
     }
     void MoveVehicle()
     {
         if (Grounded)
         {
             transform.position += GetForwardVector() * Direction * Time.deltaTime * Speed;
-            if(Direction != 0)
+            if (Direction != 0)
             {
                 transform.Rotate(new Vector3(0, MovementTurn * Time.deltaTime * Mathf.Abs(Direction) * 2, 0));
-                if(MovementTurn > 0)
+                if (MovementTurn > 0)
                 {
-                    Animate(ANIMATESTATES.RightTurn);
+                    //Animate(ANIMATESTATES.RightTurn);
                 }
                 else if (MovementTurn < 0)
                 {
-                    Animate(ANIMATESTATES.LeftTurn);
+                   // Animate(ANIMATESTATES.LeftTurn);
                 }
             }
             else
@@ -143,62 +172,112 @@ public class VehiclePhysics : MonoBehaviour
     {
         if(MeshOfVehicle)
         {
+            transform.LookAt(MeshOfVehicle.transform.position + GetForwardVector(), MeshOfVehicle.transform.up);
+        }
+        if(!Grounded)
+        {
             transform.LookAt(MeshOfVehicle.transform.position + GetForwardVector());
         }
     }
+    bool CheckForCrashFromFront()
+    {
+        RaycastHit hit;
+        return Physics.Raycast(MeshOfVehicle.transform.position, GetForwardVector(), out hit, .1f) &&
+            Physics.Raycast(MeshOfVehicle.transform.position, GetForwardVector() + MeshOfVehicle.transform.right, out hit, .1f) &&
+            Physics.Raycast(MeshOfVehicle.transform.position, GetForwardVector() + -MeshOfVehicle.transform.right, out hit, .1f);
+    }
+    bool CheckForCrashFromBack()
+    {
+        RaycastHit hit;
+        return Physics.Raycast(MeshOfVehicle.transform.position, -GetForwardVector(), out hit, 1) &&
+            Physics.Raycast(MeshOfVehicle.transform.position, -GetForwardVector() + MeshOfVehicle.transform.right, out hit, 1) &&
+            Physics.Raycast(MeshOfVehicle.transform.position, -GetForwardVector() + -MeshOfVehicle.transform.right, out hit, 1);
+    }
+    bool CheckForCrashFromTop()
+    {
+        RaycastHit hit;
 
+        if(Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up, out hit, .1f))
+        {
+            if(Mathf.Abs(transform.rotation.x) > 0.1f || Mathf.Abs(transform.rotation.z) > 0.1f)
+            {
+                Grounded = true;
+                //Flip Vehicle back over
+            }
+        }
+        if (Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up + MeshOfVehicle.transform.forward, out hit, .1f))
+        {
+            if (Mathf.Abs(transform.rotation.x) > 0.1f || Mathf.Abs(transform.rotation.z) > 0.1f)
+            {
+                Grounded = true;
+                //Flip Vehicle back over
+            }
+            else
+            {
+                if (Direction > 0)
+                {
+                    Direction = 0;
+                }
+                CrashedFromFront = true;
+            }
+        }
+        if (Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up + -MeshOfVehicle.transform.forward, out hit, .1f))
+        {
+            if (Mathf.Abs(transform.rotation.x) > 0.1f || Mathf.Abs(transform.rotation.z) > 0.1f)
+            {
+                Grounded = true;
+                //Flip Vehicle back over
+            }
+            else
+            {
+                if (Direction < 0)
+                {
+                    Direction = 0;
+                }
+                CrashedFromBack = true;
+            }
+        }
+        return false;
+    }
     void CheckForCornerTouch()
     {
         Vector3 Right = MeshOfVehicle.transform.right * (transform.localScale.x / 2);
         Vector3 Forward = MeshOfVehicle.transform.forward * transform.localScale.y;
         Vector3 MeshPosition = MeshOfVehicle.transform.position;
 
-        if (Physics.Raycast(MeshPosition + -Right + Forward, -transform.up, out CornersHit[0], HoverAmount))
+        if (Physics.Raycast(MeshPosition + Right + Forward, -transform.up, out CornersHit[0], HoverAmount * 2))
         {
-            if (CornersHit[0].transform.gameObject.tag.CompareTo("Ground") == 0)
-            {
-                BoolCornerHit[0] = true;
-            }
-            else
-            {
-                BoolCornerHit[0] = false;
-            }   
+            BoolCornerHit[0] = (CornersHit[0].transform.gameObject.tag.CompareTo("Ground") == 0);
         }
-        if (Physics.Raycast(MeshPosition + Right + Forward, -transform.up, out CornersHit[0], HoverAmount))
+        else
         {
-            if (CornersHit[1].transform.gameObject.tag.CompareTo("Ground") == 0)
-            {
-                BoolCornerHit[1] = true;
-            }
-            else
-            {
-                BoolCornerHit[1] = false;
-            }
+            BoolCornerHit[0] = false;
         }
-        if (Physics.Raycast(MeshPosition + Right + -Forward, -transform.up, out CornersHit[0], HoverAmount))
+        if (Physics.Raycast(MeshPosition + -Right + Forward, -transform.up, out CornersHit[1], HoverAmount * 2))
         {
-            if (CornersHit[2].transform.gameObject.tag.CompareTo("Ground") == 0)
-            {
-                BoolCornerHit[2] = true;
-            }
-            else
-            {
-                BoolCornerHit[2] = false;
-            }
+            BoolCornerHit[1] = (CornersHit[1].transform.gameObject.tag.CompareTo("Ground") == 0);
         }
-        if (Physics.Raycast(MeshPosition + -Right + -Forward, -transform.up, out CornersHit[0], HoverAmount))
+        else
         {
-            if (CornersHit[3].transform.gameObject.tag.CompareTo("Ground") == 0)
-            {
-                BoolCornerHit[3] = true;
-            }
-            else
-            {
-                BoolCornerHit[3] = false;
-            }
+            BoolCornerHit[1] = false;
+        }
+        if (Physics.Raycast(MeshPosition + Right + -Forward, -transform.up, out CornersHit[2], HoverAmount * 2))
+        {
+            BoolCornerHit[2] = (CornersHit[2].transform.gameObject.tag.CompareTo("Ground") == 0);
+        }
+        else
+        {
+            BoolCornerHit[2] = false;
+        }
+        if (Physics.Raycast(MeshPosition + -Right + -Forward, -transform.up, out CornersHit[3], HoverAmount * 2))
+        {
+            BoolCornerHit[3] = (CornersHit[3].transform.gameObject.tag.CompareTo("Ground") == 0);
+        }
+        else
+        {
+            BoolCornerHit[3] = false;
         }
     }
-
 
     public void SlowVehicleDown()
     {
@@ -214,37 +293,57 @@ public class VehiclePhysics : MonoBehaviour
     }
     void DebugRays()
     {
-        Debug.DrawRay(transform.position, Vector3.forward * transform.localScale.z * 2, Color.magenta);//forward
         Debug.DrawRay(transform.position, GetForwardVector() * transform.localScale.z * 2, Color.blue);//Movement Direction
+        Debug.DrawRay(MeshOfVehicle.transform.position, -MeshOfVehicle.transform.up * HoverAmount, Color.yellow);//Down
         Debug.DrawRay(transform.position, -transform.up * HoverAmount, Color.red);//Down
 
-        Vector3 Right = MeshOfVehicle.transform.right * (transform.localScale.x / 2);
-        Vector3 Forward = MeshOfVehicle.transform.forward * transform.localScale.y;
-        Vector3 MeshPosition = MeshOfVehicle.transform.position;
 
-        Debug.DrawRay(MeshPosition + Right + Forward, -transform.up * HoverAmount, Color.green);//   Front Right
-        if (BoolCornerHit[0])
-        {
-            Debug.DrawRay(MeshPosition + Right + Forward, -transform.up * HoverAmount, Color.red);//   Front Right
-        }
 
-        Debug.DrawRay(MeshPosition + -Right + Forward, -transform.up * HoverAmount, Color.green);//  Back  Right
-        if (BoolCornerHit[1])
-        {
-            Debug.DrawRay(MeshPosition + -Right + Forward, -transform.up * HoverAmount, Color.red);//   Front Right
-        }
+        #region Collision Detection
+        //Collision Detection
+        #region Front Detection
+        Debug.DrawRay(transform.position, GetForwardVector() * .5f * transform.localScale.z * 2, Color.white);//Front Detection
+        Debug.DrawRay(transform.position, ((GetForwardVector() + MeshOfVehicle.transform.right * .5f) * .5f) * transform.localScale.z * 2, Color.white);//Front Right Detection
+        Debug.DrawRay(transform.position, ((GetForwardVector() + -MeshOfVehicle.transform.right * .5f) * .5f) * transform.localScale.z * 2, Color.white);//Front Left Detection
+        #endregion
+        #region Back Detection
+        Debug.DrawRay(transform.position, -GetForwardVector() * .5f * transform.localScale.z * 2, Color.white);//Back Detection
+        Debug.DrawRay(transform.position, (-GetForwardVector() + MeshOfVehicle.transform.right * .5f) * .5f * transform.localScale.z * 2, Color.white);//Back Right Detection
+        Debug.DrawRay(transform.position, (-GetForwardVector() + -MeshOfVehicle.transform.right * .5f) * .5f * transform.localScale.z * 2, Color.white);//Back Left Detection
+        #endregion
+        #region Roof Detection
+        Debug.DrawRay(transform.position, (MeshOfVehicle.transform.up + MeshOfVehicle.transform.forward) * .1f, Color.red);//Up + Front
+        Debug.DrawRay(transform.position, MeshOfVehicle.transform.up * .1f, Color.red);//Up
+        Debug.DrawRay(transform.position, (MeshOfVehicle.transform.up + -MeshOfVehicle.transform.forward) * .1f, Color.red);//Up + back
+        #endregion
+        #endregion
+        #region Edge Detection
+        //Vector3 Right = MeshOfVehicle.transform.right * (transform.localScale.x / 2);
+        //Vector3 Forward = MeshOfVehicle.transform.forward * transform.localScale.y;
+        //Vector3 MeshPosition = MeshOfVehicle.transform.position;
+        //Debug.DrawRay(MeshPosition + Right + Forward, -transform.up * HoverAmount * 2, Color.green);//   Front Right
+        //if (!BoolCornerHit[0])
+        //{
+        //    Debug.DrawRay(MeshPosition + Right + Forward, -transform.up * HoverAmount * 2, Color.red);//   Front Right
+        //}
 
-        Debug.DrawRay(MeshPosition + Right + -Forward, -transform.up * HoverAmount, Color.green);//  Front Left
-        if (BoolCornerHit[2])
-        {
-            Debug.DrawRay(MeshPosition + Right + -Forward, -transform.up * HoverAmount, Color.red);//   Front Right
-        }
+        //Debug.DrawRay(MeshPosition + -Right + Forward, -transform.up * HoverAmount * 2, Color.green);//  Back  Right
+        //if (!BoolCornerHit[1])
+        //{
+        //    Debug.DrawRay(MeshPosition + -Right + Forward, -transform.up * HoverAmount * 2, Color.red);//   Front Right
+        //}
 
-        Debug.DrawRay(MeshPosition + -Right + -Forward, -transform.up * HoverAmount, Color.green);// Back  Left
-        if (BoolCornerHit[3])
-        {
-            Debug.DrawRay(MeshPosition + -Right + -Forward, -transform.up * HoverAmount, Color.red);//   Front Right
-        }
+        //Debug.DrawRay(MeshPosition + Right + -Forward, -transform.up * HoverAmount * 2, Color.green);//  Front Left
+        //if (!BoolCornerHit[2])
+        //{
+        //    Debug.DrawRay(MeshPosition + Right + -Forward, -transform.up * HoverAmount * 2, Color.red);//   Front Right
+        //}
 
+        //Debug.DrawRay(MeshPosition + -Right + -Forward, -transform.up * HoverAmount * 2, Color.green);// Back  Left
+        //if (!BoolCornerHit[3])
+        //{
+        //    Debug.DrawRay(MeshPosition + -Right + -Forward, -transform.up * HoverAmount * 2, Color.red);//   Front Right
+        //}
+        #endregion
     }
 }
