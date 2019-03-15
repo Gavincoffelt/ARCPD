@@ -179,6 +179,8 @@ public class VehiclePhysics : MonoBehaviour
         if(MeshOfVehicle)
         {
             transform.LookAt(MeshOfVehicle.transform.position + GetForwardVector(), MeshOfVehicle.transform.up);
+            //transform.eulerAngles = new Vector3(-hit.transform.eulerAngles.x, transform.eulerAngles.y, -hit.transform.eulerAngles.z);
+            //Work in progress to do a screw kind of driving
         }
         if(!Grounded)
         {
