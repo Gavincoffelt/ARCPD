@@ -29,6 +29,7 @@ namespace GoogleARCore.Examples.HelloAR
     // Set up touch input propagation while using Instant Preview in the editor.
     using Input = InstantPreviewInput;
 #endif
+    
 
     /// <summary>
     /// Controls the HelloAR example.
@@ -79,7 +80,7 @@ namespace GoogleARCore.Examples.HelloAR
             {
                 return;
             }
-
+            
             // Raycast against the location the player touched to search for planes.
             TrackableHit hit;
             TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon |
