@@ -704,7 +704,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 6}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &803042171
@@ -751,9 +751,9 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: Option A
+    - m_Text: TinyTest
       m_Image: {fileID: 0}
-    - m_Text: Option B
+    - m_Text: PlayGround
       m_Image: {fileID: 0}
     - m_Text: Option C
       m_Image: {fileID: 0}
@@ -1036,7 +1036,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Option A
+  m_Text: TinyTest
 --- !u!222 &954459182
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1651,7 +1651,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Option1: {fileID: 1819032268542536, guid: 2000ac796fbb4834aa958c1b16191044, type: 2}
-  Option2: {fileID: 1190091649889860, guid: b27e8d7fe70df464188ea5dcf2af0bb3, type: 2}
+  Option2: {fileID: 1880696657060762, guid: 4f7f6c7a7bc6ea242a83949b236a2952, type: 2}
   Option3: {fileID: 1190091649889860, guid: 242a320930b81430ba610f94f9b760c8, type: 2}
   Selection: {fileID: 0}
 --- !u!4 &1903614919
@@ -1824,7 +1824,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1947473979}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1903614918}
+        m_MethodName: KILLLLLLLLLLLLLL
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1947473979

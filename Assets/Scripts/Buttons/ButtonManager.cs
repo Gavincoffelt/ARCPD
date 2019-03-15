@@ -45,7 +45,10 @@ public class ButtonManager : MonoBehaviour {
         }
     }
 
-
+    public void KILLLLLLLLLLLLLL()
+    {
+        Application.Quit();
+    }
 
 
 }
