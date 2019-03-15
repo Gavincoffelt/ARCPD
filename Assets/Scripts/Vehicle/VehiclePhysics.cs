@@ -7,6 +7,7 @@ using GoogleARCore.Examples.Common;
 public class VehiclePhysics : MonoBehaviour
 {
     public float GravityModifier = 1;
+    GameObject Respawn;
 
     [Header("Car Mechanics")]
     float Direction = 0;
@@ -62,6 +63,7 @@ public class VehiclePhysics : MonoBehaviour
     {
         MainCamera = GameObject.Find("Camera");
         CameraLocation = GameObject.Find("CameraMoveTo");
+        Respawn = GameObject.Find("Respawn");
 
 
         Grounded = false;
@@ -79,6 +81,9 @@ public class VehiclePhysics : MonoBehaviour
                 MeshOfVehicle = gameObject.GetComponentInChildren<BoxCollider>().gameObject;
             }
         }
+
+
+        RespawnUser();
 	}
 	
 	void Update ()
@@ -95,18 +100,19 @@ public class VehiclePhysics : MonoBehaviour
         CorrectMeshAngle();
 
         TempBringCamera();
+        CheckForRespawn();
 
         DebugRays();
 	}
 
     void TempBringCamera()
     {
-        MainCamera.transform.LookAt(transform.position);
-        //MainCamera.gameObject.transform.position += Vector3.Lerp(MainCamera.transform.position, CameraLocation.transform.position, 0.05f);
+        if (MainCamera && CameraLocation)
+        {
+            MainCamera.gameObject.transform.position = Vector3.Lerp(MainCamera.transform.position, CameraLocation.transform.position, Speed * Time.deltaTime);
+            MainCamera.GetComponentInChildren<Transform>().transform.LookAt(MeshOfVehicle.transform.position);
+        }
     }
-
-
-
 
     void ApplyGravity()
     {
@@ -276,6 +282,26 @@ public class VehiclePhysics : MonoBehaviour
         else
         {
             BoolCornerHit[3] = false;
+        }
+    }
+
+    void CheckForRespawn()
+    {
+        RaycastHit TempHit;
+        if(Physics.Raycast(transform.position, -Vector3.up, out TempHit, MeshOfVehicle.transform.localScale.y))
+        {
+            if (hit.transform.gameObject.tag.CompareTo("Respawn") == 0)
+            {
+                RespawnUser();
+            }
+        }
+        Debug.DrawRay(transform.position, -Vector3.up * 1 * MeshOfVehicle.transform.localScale.y, Color.red);
+    }
+    void RespawnUser()
+    {
+        if(Respawn)
+        {
+            transform.position = Respawn.transform.position;
         }
     }
 
