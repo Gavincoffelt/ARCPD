@@ -43,6 +43,7 @@ public class VehiclePhysics : MonoBehaviour
     bool[] BoolCornerHit = new bool[4];
     Vector3 ForwardVector;
     public bool Grounded;
+    public bool Rolling;
 
     public bool CrashedFromFront;
     public bool CrashedFromBack;
@@ -65,7 +66,7 @@ public class VehiclePhysics : MonoBehaviour
         CameraLocation = GameObject.Find("CameraMoveTo");
         Respawn = GameObject.Find("Respawn");
 
-
+        Rolling = false;
         Grounded = false;
         CrashedFromFront = false;
         CrashedFromBack = false;
@@ -124,7 +125,7 @@ public class VehiclePhysics : MonoBehaviour
     }
     bool CheckGrounded()
     {
-        if(Physics.Raycast(MeshOfVehicle.transform.position, -MeshOfVehicle.transform.up, out hit, HoverAmount))
+        if(Physics.Raycast(MeshOfVehicle.transform.position, -MeshOfVehicle.transform.up, out hit, HoverAmount * 1.5f))
         {
             if (hit.transform.gameObject.tag.CompareTo("Ground") == 0)
             {
@@ -167,6 +168,12 @@ public class VehiclePhysics : MonoBehaviour
             {
                 Animate(ANIMATESTATES.IDLE);
             }
+
+            print(Vector3.Angle(MeshOfVehicle.transform.forward, Vector3.up));
+            if(Vector3.Angle(MeshOfVehicle.transform.forward, Vector3.up) < 20)
+            {
+                Direction -= Time.deltaTime;
+            }
         }
         else
         {
@@ -179,12 +186,23 @@ public class VehiclePhysics : MonoBehaviour
         if(MeshOfVehicle)
         {
             transform.LookAt(MeshOfVehicle.transform.position + GetForwardVector(), MeshOfVehicle.transform.up);
-            //transform.eulerAngles = new Vector3(-hit.transform.eulerAngles.x, transform.eulerAngles.y, -hit.transform.eulerAngles.z);
-            //Work in progress to do a screw kind of driving
+            if (Grounded)
+            {
+                if (hit.transform != null)
+                {
+                    Quaternion NewRot = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, -hit.transform.eulerAngles.z);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, NewRot, Time.deltaTime * 10);
+                }
+                else
+                {
+                    Grounded = true;
+                }
+            }
         }
         if(!Grounded)
         {
-            transform.LookAt(MeshOfVehicle.transform.position + GetForwardVector());
+            //transform.LookAt(MeshOfVehicle.transform.position + GetForwardVector(), transform.up);
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
         }
     }
     bool CheckForCrashFromFront()
@@ -292,7 +310,7 @@ public class VehiclePhysics : MonoBehaviour
         RaycastHit TempHit;
         if(Physics.Raycast(transform.position, -Vector3.up, out TempHit, MeshOfVehicle.transform.localScale.y))
         {
-            if (hit.transform.gameObject.tag.CompareTo("Respawn") == 0)
+            if (hit.transform && hit.transform.gameObject.tag.CompareTo("Respawn") == 0)
             {
                 RespawnUser();
             }
@@ -304,6 +322,7 @@ public class VehiclePhysics : MonoBehaviour
         if(Respawn)
         {
             transform.position = Respawn.transform.position;
+            //transform.LookAt(Respawn.transform.forward);
         }
     }
 

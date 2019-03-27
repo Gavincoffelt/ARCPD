@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - JoyStick
+  - Interactable
   layers:
   - Default
   - TransparentFX
