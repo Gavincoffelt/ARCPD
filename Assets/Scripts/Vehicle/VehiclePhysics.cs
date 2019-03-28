@@ -82,7 +82,7 @@ public class VehiclePhysics : MonoBehaviour
                 MeshOfVehicle = gameObject.GetComponentInChildren<BoxCollider>().gameObject;
             }
         }
-
+        Speed *= transform.parent.transform.localScale.x;
 
         RespawnUser();
 	}
@@ -119,7 +119,14 @@ public class VehiclePhysics : MonoBehaviour
     {
         if(!Grounded)
         {
-            GravityModifier = 1 - Mathf.Abs(Direction);
+            if (Direction < 0)
+            {
+                GravityModifier = 1 - Mathf.Abs(Direction);
+            }
+            else
+            {
+                GravityModifier = 0.5f - Mathf.Abs(Direction);
+            }
             transform.position += ((Physics.gravity - (Physics.gravity * Mathf.Abs(Direction)))) * GravityModifier * Time.deltaTime * (transform.localScale.y);
         }
     }
@@ -149,9 +156,9 @@ public class VehiclePhysics : MonoBehaviour
     }
     void MoveVehicle()
     {
+        transform.position += GetForwardVector() * Direction * Time.deltaTime * Speed;
         if (Grounded)
         {
-            transform.position += GetForwardVector() * Direction * Time.deltaTime * Speed;
             if (Direction != 0)
             {
                 transform.Rotate(new Vector3(0, MovementTurn * Time.deltaTime * Mathf.Abs(Direction) * 2, 0));
@@ -168,8 +175,6 @@ public class VehiclePhysics : MonoBehaviour
             {
                 Animate(ANIMATESTATES.IDLE);
             }
-
-            print(Vector3.Angle(MeshOfVehicle.transform.forward, Vector3.up));
             if(Vector3.Angle(MeshOfVehicle.transform.forward, Vector3.up) < 20)
             {
                 Direction -= Time.deltaTime;
@@ -177,7 +182,6 @@ public class VehiclePhysics : MonoBehaviour
         }
         else
         {
-            transform.position += GetForwardVector() * Direction * Time.deltaTime * Speed;
             SlowVehicleDown();
         }
     }
@@ -208,16 +212,18 @@ public class VehiclePhysics : MonoBehaviour
     bool CheckForCrashFromFront()
     {
         RaycastHit hit;
-        return Physics.Raycast(MeshOfVehicle.transform.position, GetForwardVector(), out hit, .1f) &&
-            Physics.Raycast(MeshOfVehicle.transform.position, GetForwardVector() + MeshOfVehicle.transform.right, out hit, .1f) &&
-            Physics.Raycast(MeshOfVehicle.transform.position, GetForwardVector() + -MeshOfVehicle.transform.right, out hit, .1f);
+        string CheckPoint = "Checkpoint";
+        return Physics.Raycast(MeshOfVehicle.transform.position, GetForwardVector(), out hit, .1f) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0 &&
+            Physics.Raycast(MeshOfVehicle.transform.position, GetForwardVector() + MeshOfVehicle.transform.right, out hit, .1f) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0 &&
+            Physics.Raycast(MeshOfVehicle.transform.position, GetForwardVector() + -MeshOfVehicle.transform.right, out hit, .1f) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0;
     }
     bool CheckForCrashFromBack()
     {
         RaycastHit hit;
-        return Physics.Raycast(MeshOfVehicle.transform.position, -GetForwardVector(), out hit, 1) &&
-            Physics.Raycast(MeshOfVehicle.transform.position, -GetForwardVector() + MeshOfVehicle.transform.right, out hit, 1) &&
-            Physics.Raycast(MeshOfVehicle.transform.position, -GetForwardVector() + -MeshOfVehicle.transform.right, out hit, 1);
+        string CheckPoint = "Checkpoint";
+        return Physics.Raycast(MeshOfVehicle.transform.position, -GetForwardVector(), out hit, 1) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0 &&
+            Physics.Raycast(MeshOfVehicle.transform.position, -GetForwardVector() + MeshOfVehicle.transform.right, out hit, 1) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0 &&
+            Physics.Raycast(MeshOfVehicle.transform.position, -GetForwardVector() + -MeshOfVehicle.transform.right, out hit, 1) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0;
     }
     bool CheckForCrashFromTop()
     {
@@ -328,8 +334,15 @@ public class VehiclePhysics : MonoBehaviour
 
     public void SlowVehicleDown()
     {
-        MovementDirection -= Mathf.Lerp(MovementDirection, 0, 0.01f) * Time.deltaTime;
-        if (Mathf.Abs(MovementDirection) < 0.1f)
+        if (Grounded)
+        {
+            MovementDirection -= Mathf.Lerp(MovementDirection, 0, 0.01f) * Time.deltaTime;
+        }
+        else
+        {
+            MovementDirection -= Mathf.Lerp(MovementDirection, 0, 0.001f) * Time.deltaTime;
+        }
+        if (Mathf.Abs(MovementDirection) < 0.05f)
         {
             MovementDirection = 0;
         }
@@ -393,4 +406,5 @@ public class VehiclePhysics : MonoBehaviour
         //}
         #endregion
     }
+
 }
