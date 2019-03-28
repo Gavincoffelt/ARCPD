@@ -323,7 +323,6 @@ public class VehiclePhysics : MonoBehaviour
             Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up + -MeshOfVehicle.transform.forward, out hit, .1f) &&
             hit.transform.tag.CompareTo(CheckPoint) == 0)
         {
-            hit.transform.gameObject.SetActive(false);
             return hit.transform.gameObject;
         }
         return null;
