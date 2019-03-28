@@ -315,7 +315,7 @@ public class VehiclePhysics : MonoBehaviour
         return false;
     }
 
-    public bool HitCheckpoint()
+    public GameObject HitCheckpoint()
     {
         string CheckPoint = "CheckPoint";
         if ((Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up + MeshOfVehicle.transform.forward, out hit, .1f) &&
@@ -324,9 +324,9 @@ public class VehiclePhysics : MonoBehaviour
             hit.transform.tag.CompareTo(CheckPoint) == 0)
         {
             hit.transform.gameObject.SetActive(false);
-            return true;
+            return hit.transform.gameObject;
         }
-        return false;
+        return null;
     }
 
     void CheckForCornerTouch()
