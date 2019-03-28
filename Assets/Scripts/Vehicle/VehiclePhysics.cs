@@ -6,9 +6,13 @@ using GoogleARCore.Examples.Common;
 
 public class VehiclePhysics : MonoBehaviour
 {
-    public float GravityModifier = 1;
+    #region Car Misc
     GameObject Respawn;
+    int Health = 100;
+    float MinHitSpeed = 2;
+    #endregion
 
+    #region Car Mechanics
     [Header("Car Mechanics")]
     float Direction = 0;
     public float MovementDirection
@@ -35,30 +39,42 @@ public class VehiclePhysics : MonoBehaviour
         }
     }
     public float Speed;
+    #endregion
 
+    #region Car Physics
     [Header("Car Physics")]
-    public float HoverAmount;
     RaycastHit hit;
     RaycastHit[] CornersHit = new RaycastHit[4];
     bool[] BoolCornerHit = new bool[4];
+
+    public float GravityModifier = 1;
+
     Vector3 ForwardVector;
+
+    public float HoverAmount;
     public bool Grounded;
     public bool Rolling;
 
     public bool CrashedFromFront;
     public bool CrashedFromBack;
+    #endregion
 
+    #region Car Children
     [Header("Car Children")]
     public GameObject MeshOfVehicle;
+    #endregion
 
+    #region Car Animations
     [Header("Animation")]
     Animator MyAnim;
     enum ANIMATESTATES { IDLE, LeftTurn, RightTurn};
+    #endregion
 
-
-    [Header("Temp")]
+    #region CameraInfo
+    [Header("Camera Info")]
     GameObject MainCamera;
     GameObject CameraLocation;
+    #endregion
 
     void Start ()
     {
@@ -71,24 +87,19 @@ public class VehiclePhysics : MonoBehaviour
         CrashedFromFront = false;
         CrashedFromBack = false;
         MyAnim = GetComponent<Animator>();
-        if(!MeshOfVehicle)
+        if (!MeshOfVehicle)
         {
-            if (!(gameObject.GetComponentInChildren<Transform>().gameObject))
-            {
-                Debug.LogError("Could not find Mesh for the vehicle");
-            }
-            else
-            {
-                MeshOfVehicle = gameObject.GetComponentInChildren<BoxCollider>().gameObject;
-            }
+            Debug.LogError("Could not find Mesh for the vehicle");
         }
-
+        Speed *= transform.parent.transform.localScale.x;
 
         RespawnUser();
 	}
 	
 	void Update ()
     {
+        if (!MeshOfVehicle)
+            return;
         ApplyGravity();
 
         Grounded = CheckGrounded();
@@ -102,6 +113,9 @@ public class VehiclePhysics : MonoBehaviour
 
         TempBringCamera();
         CheckForRespawn();
+
+        if (HitCheckpoint())
+            print("Hit Checkpoint");
 
         DebugRays();
 	}
@@ -117,26 +131,38 @@ public class VehiclePhysics : MonoBehaviour
 
     void ApplyGravity()
     {
-        if(!Grounded)
+        if(!Grounded)//Not on the ground
         {
-            GravityModifier = 1 - Mathf.Abs(Direction);
+            if (Direction < 0)//not in motion
+            {
+                GravityModifier = 1 - Mathf.Abs(Direction);//How fast it will fall
+            }
+            else//In Motion
+            {
+                GravityModifier = 1 - Mathf.Abs(Direction);//Falls slower
+            }
+            //Applys the gravity
             transform.position += ((Physics.gravity - (Physics.gravity * Mathf.Abs(Direction)))) * GravityModifier * Time.deltaTime * (transform.localScale.y);
         }
     }
     bool CheckGrounded()
     {
-        if(Physics.Raycast(MeshOfVehicle.transform.position, -MeshOfVehicle.transform.up, out hit, HoverAmount * 1.5f))
+        if (MeshOfVehicle)
         {
-            if (hit.transform.gameObject.tag.CompareTo("Ground") == 0)
+            if (Physics.Raycast(MeshOfVehicle.transform.position, -MeshOfVehicle.transform.up, out hit, HoverAmount * 1.5f))
             {
-                //Correct Hover Distance
-                if (Vector3.Distance(transform.position, hit.point) < 0.1f)
+                if (hit.transform.gameObject.tag.CompareTo("Ground") == 0)
                 {
-                    transform.position = hit.point + transform.up * HoverAmount;
+                    //Correct Hover Distance
+                    if (Vector3.Distance(transform.position, hit.point) < 0.1f)
+                    {
+                        transform.position = hit.point + transform.up * HoverAmount;
+                    }
+                    return true;
                 }
-                return true;
             }
         }
+
         return false;
     }
     Vector3 GetForwardVector()
@@ -149,9 +175,9 @@ public class VehiclePhysics : MonoBehaviour
     }
     void MoveVehicle()
     {
+        transform.position += GetForwardVector() * Direction * Time.deltaTime * Speed;
         if (Grounded)
         {
-            transform.position += GetForwardVector() * Direction * Time.deltaTime * Speed;
             if (Direction != 0)
             {
                 transform.Rotate(new Vector3(0, MovementTurn * Time.deltaTime * Mathf.Abs(Direction) * 2, 0));
@@ -168,8 +194,6 @@ public class VehiclePhysics : MonoBehaviour
             {
                 Animate(ANIMATESTATES.IDLE);
             }
-
-            print(Vector3.Angle(MeshOfVehicle.transform.forward, Vector3.up));
             if(Vector3.Angle(MeshOfVehicle.transform.forward, Vector3.up) < 20)
             {
                 Direction -= Time.deltaTime;
@@ -177,7 +201,6 @@ public class VehiclePhysics : MonoBehaviour
         }
         else
         {
-            transform.position += GetForwardVector() * Direction * Time.deltaTime * Speed;
             SlowVehicleDown();
         }
     }
@@ -207,17 +230,27 @@ public class VehiclePhysics : MonoBehaviour
     }
     bool CheckForCrashFromFront()
     {
+        if(!MeshOfVehicle)
+            return false;
+
         RaycastHit hit;
-        return Physics.Raycast(MeshOfVehicle.transform.position, GetForwardVector(), out hit, .1f) &&
-            Physics.Raycast(MeshOfVehicle.transform.position, GetForwardVector() + MeshOfVehicle.transform.right, out hit, .1f) &&
-            Physics.Raycast(MeshOfVehicle.transform.position, GetForwardVector() + -MeshOfVehicle.transform.right, out hit, .1f);
+        string CheckPoint = "Checkpoint";
+        Vector3 StartRay = MeshOfVehicle.transform.position + new Vector3(0,.5f,0);
+        return Physics.Raycast(StartRay, GetForwardVector(), out hit, .1f) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0 &&
+            Physics.Raycast(StartRay, GetForwardVector() + MeshOfVehicle.transform.right, out hit, .1f) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0 &&
+            Physics.Raycast(StartRay, GetForwardVector() + -MeshOfVehicle.transform.right, out hit, .1f) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0;
     }
     bool CheckForCrashFromBack()
     {
+        if (!MeshOfVehicle)
+            return false;
+
         RaycastHit hit;
-        return Physics.Raycast(MeshOfVehicle.transform.position, -GetForwardVector(), out hit, 1) &&
-            Physics.Raycast(MeshOfVehicle.transform.position, -GetForwardVector() + MeshOfVehicle.transform.right, out hit, 1) &&
-            Physics.Raycast(MeshOfVehicle.transform.position, -GetForwardVector() + -MeshOfVehicle.transform.right, out hit, 1);
+        string CheckPoint = "Checkpoint";
+        Vector3 StartRay = MeshOfVehicle.transform.position + new Vector3(0, .5f, 0);
+        return Physics.Raycast(StartRay, -GetForwardVector(), out hit, 1) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0 &&
+            Physics.Raycast(StartRay, -GetForwardVector() + MeshOfVehicle.transform.right, out hit, 1) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0 &&
+            Physics.Raycast(StartRay, -GetForwardVector() + -MeshOfVehicle.transform.right, out hit, 1) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0;
     }
     bool CheckForCrashFromTop()
     {
@@ -240,11 +273,11 @@ public class VehiclePhysics : MonoBehaviour
             }
             else
             {
+                CrashedFromFront = true;
                 if (Direction > 0)
                 {
-                    Direction = 0;
+                    goto JumpPos;//Jumping to the same data as below
                 }
-                CrashedFromFront = true;
             }
         }
         if (Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up + -MeshOfVehicle.transform.forward, out hit, .1f))
@@ -258,13 +291,43 @@ public class VehiclePhysics : MonoBehaviour
             {
                 if (Direction < 0)
                 {
-                    Direction = 0;
+                    goto JumpPos;//Jumping to the same data as Above
                 }
                 CrashedFromBack = true;
             }
         }
         return false;
+        
+        JumpPos:
+        if(hit.transform.gameObject.tag.CompareTo("CheckPoint") == 0)
+        {
+            return false;
+        }
+        if (Mathf.Abs(Direction * Speed) > MinHitSpeed)
+        {
+            int DamageMultiplier = 5;
+            Health -= 1 + (int)((Mathf.Abs(Direction * Speed) - MinHitSpeed) * DamageMultiplier);
+            print("Damaged: " + ((int)((Mathf.Abs(Direction * Speed) - MinHitSpeed) * DamageMultiplier) + 1));
+            print("Health: " + Health);
+        }
+
+        Direction = 0;//Where it sets the speed after collision
+        return false;
     }
+
+    public GameObject HitCheckpoint()
+    {
+        string CheckPoint = "CheckPoint";
+        if ((Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up + MeshOfVehicle.transform.forward, out hit, .1f) &&
+            hit.transform.tag.CompareTo(CheckPoint) == 0) ||
+            Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up + -MeshOfVehicle.transform.forward, out hit, .1f) &&
+            hit.transform.tag.CompareTo(CheckPoint) == 0)
+        {
+            return hit.transform.gameObject;
+        }
+        return null;
+    }
+
     void CheckForCornerTouch()
     {
         Vector3 Right = MeshOfVehicle.transform.right * (transform.localScale.x / 2);
@@ -328,8 +391,15 @@ public class VehiclePhysics : MonoBehaviour
 
     public void SlowVehicleDown()
     {
-        MovementDirection -= Mathf.Lerp(MovementDirection, 0, 0.01f) * Time.deltaTime;
-        if (Mathf.Abs(MovementDirection) < 0.1f)
+        if (Grounded)
+        {
+            MovementDirection -= Mathf.Lerp(MovementDirection, 0, 0.01f) * Time.deltaTime;
+        }
+        else
+        {
+            MovementDirection -= Mathf.Lerp(MovementDirection, 0, 0.01f) * Time.deltaTime * 0.5f;
+        }
+        if (Mathf.Abs(MovementDirection) < 0.01f)
         {
             MovementDirection = 0;
         }
@@ -349,14 +419,15 @@ public class VehiclePhysics : MonoBehaviour
         #region Collision Detection
         //Collision Detection
         #region Front Detection
-        Debug.DrawRay(transform.position, GetForwardVector() * .5f * transform.localScale.z * 2, Color.white);//Front Detection
-        Debug.DrawRay(transform.position, ((GetForwardVector() + MeshOfVehicle.transform.right * .5f) * .5f) * transform.localScale.z * 2, Color.white);//Front Right Detection
-        Debug.DrawRay(transform.position, ((GetForwardVector() + -MeshOfVehicle.transform.right * .5f) * .5f) * transform.localScale.z * 2, Color.white);//Front Left Detection
+        Vector3 StartRay = MeshOfVehicle.transform.position + new Vector3(0, .5f, 0) * transform.localScale.z;
+        Debug.DrawRay(StartRay, GetForwardVector() * .5f * transform.localScale.z * 2, Color.white);//Front Detection
+        Debug.DrawRay(StartRay, ((GetForwardVector() + MeshOfVehicle.transform.right * .5f) * .5f) * transform.localScale.z * 2, Color.white);//Front Right Detection
+        Debug.DrawRay(StartRay, ((GetForwardVector() + -MeshOfVehicle.transform.right * .5f) * .5f) * transform.localScale.z * 2, Color.white);//Front Left Detection
         #endregion
         #region Back Detection
-        Debug.DrawRay(transform.position, -GetForwardVector() * .5f * transform.localScale.z * 2, Color.white);//Back Detection
-        Debug.DrawRay(transform.position, (-GetForwardVector() + MeshOfVehicle.transform.right * .5f) * .5f * transform.localScale.z * 2, Color.white);//Back Right Detection
-        Debug.DrawRay(transform.position, (-GetForwardVector() + -MeshOfVehicle.transform.right * .5f) * .5f * transform.localScale.z * 2, Color.white);//Back Left Detection
+        Debug.DrawRay(StartRay, -GetForwardVector() * .5f * transform.localScale.z * 2, Color.white);//Back Detection
+        Debug.DrawRay(StartRay, (-GetForwardVector() + MeshOfVehicle.transform.right * .5f) * .5f * transform.localScale.z * 2, Color.white);//Back Right Detection
+        Debug.DrawRay(StartRay, (-GetForwardVector() + -MeshOfVehicle.transform.right * .5f) * .5f * transform.localScale.z * 2, Color.white);//Back Left Detection
         #endregion
         #region Roof Detection
         Debug.DrawRay(transform.position, (MeshOfVehicle.transform.up + MeshOfVehicle.transform.forward) * .1f, Color.red);//Up + Front
@@ -393,4 +464,5 @@ public class VehiclePhysics : MonoBehaviour
         //}
         #endregion
     }
+
 }
