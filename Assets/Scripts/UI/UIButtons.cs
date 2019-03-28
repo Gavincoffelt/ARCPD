@@ -30,7 +30,7 @@ public class UIButtons : MonoBehaviour
         }
         else if(PlayerPhysics.MovementDirection != 0 && PlayerPhysics.Grounded)
         {
-            PlayerPhysics.SlowVehicleDown();
+                PlayerPhysics.SlowVehicleDown();
         }
     }
 
