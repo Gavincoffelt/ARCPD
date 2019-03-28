@@ -315,7 +315,7 @@ public class VehiclePhysics : MonoBehaviour
     }
 
     //Job of caller to check the GameObject is the correct checkpoint
-    public bool HitCheckpoint()//Returns which checkpoint it hit
+    public GameObject HitCheckpoint()//Returns which checkpoint it hit
     {
         string CheckPoint = "CheckPoint";
         if ((Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up + MeshOfVehicle.transform.forward, out hit, .1f) &&
@@ -325,7 +325,7 @@ public class VehiclePhysics : MonoBehaviour
         {
             return hit.transform.gameObject;
         }
-        return false;
+        return null;
     }
 
     void CheckForCornerTouch()
