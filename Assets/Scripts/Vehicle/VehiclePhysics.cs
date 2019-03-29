@@ -139,7 +139,7 @@ public class VehiclePhysics : MonoBehaviour
             }
             else//In Motion
             {
-                GravityModifier = 1 - Mathf.Abs(Direction);//Falls slower
+                GravityModifier = 2 - Mathf.Abs(Direction);//Falls slower
             }
             //Applys the gravity
             transform.position += ((Physics.gravity - (Physics.gravity * Mathf.Abs(Direction)))) * GravityModifier * Time.deltaTime * (transform.localScale.y);
@@ -158,6 +158,13 @@ public class VehiclePhysics : MonoBehaviour
                     {
                         transform.position = hit.point + transform.up * HoverAmount;
                     }
+                    if(!Grounded)
+                    {
+                        Quaternion NewRot = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, -hit.transform.eulerAngles.z);
+                        transform.rotation = NewRot;
+                        //Sets the Vehicle Up right so it does not land sideways
+                    }
+
                     return true;
                 }
             }
@@ -181,23 +188,19 @@ public class VehiclePhysics : MonoBehaviour
             if (Direction != 0)
             {
                 transform.Rotate(new Vector3(0, MovementTurn * Time.deltaTime * Mathf.Abs(Direction) * 2, 0));
-                if (MovementTurn > 0)
-                {
-                    //Animate(ANIMATESTATES.RightTurn);
-                }
-                else if (MovementTurn < 0)
-                {
-                   // Animate(ANIMATESTATES.LeftTurn);
-                }
             }
             else
             {
                 Animate(ANIMATESTATES.IDLE);
             }
-            if(Vector3.Angle(MeshOfVehicle.transform.forward, Vector3.up) < 20)
-            {
-                Direction -= Time.deltaTime;
-            }
+            //IF given more time make the gravity work when vehicle is on angles or is upsidedown
+
+            //float AngleBtwn = Mathf.Abs(Vector3.Angle(MeshOfVehicle.transform.forward, Vector3.up));
+            //print(AngleBtwn);
+            //if (AngleBtwn < 70)
+            //{
+            //    Direction -= Time.deltaTime * (AngleBtwn / 100);
+            //}
         }
         else
         {
@@ -213,19 +216,15 @@ public class VehiclePhysics : MonoBehaviour
             {
                 if (hit.transform != null)
                 {
-                    Quaternion NewRot = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, -hit.transform.eulerAngles.z);
+                    Quaternion NewRot = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z);
                     transform.rotation = Quaternion.Lerp(transform.rotation, NewRot, Time.deltaTime * 10);
+                    // Rotate the vehicle to the ground below it
                 }
                 else
                 {
                     Grounded = true;
                 }
             }
-        }
-        if(!Grounded)
-        {
-            //transform.LookAt(MeshOfVehicle.transform.position + GetForwardVector(), transform.up);
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
         }
     }
     bool CheckForCrashFromFront()
@@ -235,7 +234,7 @@ public class VehiclePhysics : MonoBehaviour
 
         RaycastHit hit;
         string CheckPoint = "Checkpoint";
-        Vector3 StartRay = MeshOfVehicle.transform.position + new Vector3(0,.5f,0);
+        Vector3 StartRay = MeshOfVehicle.transform.position + MeshOfVehicle.transform.up * transform.localScale.z;
         return Physics.Raycast(StartRay, GetForwardVector(), out hit, .1f) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0 &&
             Physics.Raycast(StartRay, GetForwardVector() + MeshOfVehicle.transform.right, out hit, .1f) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0 &&
             Physics.Raycast(StartRay, GetForwardVector() + -MeshOfVehicle.transform.right, out hit, .1f) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0;
@@ -247,7 +246,7 @@ public class VehiclePhysics : MonoBehaviour
 
         RaycastHit hit;
         string CheckPoint = "Checkpoint";
-        Vector3 StartRay = MeshOfVehicle.transform.position + new Vector3(0, .5f, 0);
+        Vector3 StartRay = MeshOfVehicle.transform.position + MeshOfVehicle.transform.up * transform.localScale.z;
         return Physics.Raycast(StartRay, -GetForwardVector(), out hit, 1) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0 &&
             Physics.Raycast(StartRay, -GetForwardVector() + MeshOfVehicle.transform.right, out hit, 1) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0 &&
             Physics.Raycast(StartRay, -GetForwardVector() + -MeshOfVehicle.transform.right, out hit, 1) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0;
@@ -315,7 +314,8 @@ public class VehiclePhysics : MonoBehaviour
         return false;
     }
 
-    public GameObject HitCheckpoint()
+    //Job of caller to check the GameObject is the correct checkpoint
+    public GameObject HitCheckpoint()//Returns which checkpoint it hit
     {
         string CheckPoint = "CheckPoint";
         if ((Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up + MeshOfVehicle.transform.forward, out hit, .1f) &&
@@ -373,7 +373,7 @@ public class VehiclePhysics : MonoBehaviour
         RaycastHit TempHit;
         if(Physics.Raycast(transform.position, -Vector3.up, out TempHit, MeshOfVehicle.transform.localScale.y))
         {
-            if (hit.transform && hit.transform.gameObject.tag.CompareTo("Respawn") == 0)
+            if ((hit.transform && hit.transform.gameObject.tag.CompareTo("Respawn") == 0))
             {
                 RespawnUser();
             }
@@ -419,7 +419,7 @@ public class VehiclePhysics : MonoBehaviour
         #region Collision Detection
         //Collision Detection
         #region Front Detection
-        Vector3 StartRay = MeshOfVehicle.transform.position + new Vector3(0, .5f, 0) * transform.localScale.z;
+        Vector3 StartRay = MeshOfVehicle.transform.position + MeshOfVehicle.transform.up * transform.localScale.z;
         Debug.DrawRay(StartRay, GetForwardVector() * .5f * transform.localScale.z * 2, Color.white);//Front Detection
         Debug.DrawRay(StartRay, ((GetForwardVector() + MeshOfVehicle.transform.right * .5f) * .5f) * transform.localScale.z * 2, Color.white);//Front Right Detection
         Debug.DrawRay(StartRay, ((GetForwardVector() + -MeshOfVehicle.transform.right * .5f) * .5f) * transform.localScale.z * 2, Color.white);//Front Left Detection
@@ -464,5 +464,7 @@ public class VehiclePhysics : MonoBehaviour
         //}
         #endregion
     }
+
+    
 
 }
