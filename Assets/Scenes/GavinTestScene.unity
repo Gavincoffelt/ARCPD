@@ -344,8 +344,9 @@ GameObject:
   - component: {fileID: 1044192962}
   - component: {fileID: 1044192961}
   - component: {fileID: 1044192960}
+  - component: {fileID: 1044192965}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: Check1
   m_TagString: CheckPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -383,7 +384,7 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1044192959}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -432,6 +433,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+--- !u!114 &1044192965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1044192959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86f72055289b0664385e9f698e4ea93a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1051841507 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224544949864652010, guid: 21f1b5add6d37b149ac916f9eea1d42f,
@@ -449,8 +461,9 @@ GameObject:
   - component: {fileID: 1459099746}
   - component: {fileID: 1459099745}
   - component: {fileID: 1459099744}
+  - component: {fileID: 1459099749}
   m_Layer: 0
-  m_Name: Plane (1)
+  m_Name: Check2
   m_TagString: CheckPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -488,7 +501,7 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1459099743}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -531,12 +544,23 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1459099743}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 16.35, y: -1.91, z: -34.26}
+  m_LocalPosition: {x: 16.35, y: -1.91, z: -20.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!114 &1459099749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1459099743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86f72055289b0664385e9f698e4ea93a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1672053042
 GameObject:
   m_ObjectHideFlags: 0
