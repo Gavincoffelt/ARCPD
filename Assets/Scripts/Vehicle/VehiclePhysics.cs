@@ -114,8 +114,9 @@ public class VehiclePhysics : MonoBehaviour
         TempBringCamera();
         CheckForRespawn();
 
-        if (HitCheckpoint())
-            print("Hit Checkpoint");
+        GameObject temp = HitCheckpoint();
+        if (temp)
+            Destroy(temp);
 
         DebugRays();
 	}
@@ -334,38 +335,17 @@ public class VehiclePhysics : MonoBehaviour
         Vector3 Forward = MeshOfVehicle.transform.forward * transform.localScale.y;
         Vector3 MeshPosition = MeshOfVehicle.transform.position;
 
-        if (Physics.Raycast(MeshPosition + Right + Forward, -transform.up, out CornersHit[0], HoverAmount * 2))
-        {
-            BoolCornerHit[0] = (CornersHit[0].transform.gameObject.tag.CompareTo("Ground") == 0);
-        }
-        else
-        {
-            BoolCornerHit[0] = false;
-        }
-        if (Physics.Raycast(MeshPosition + -Right + Forward, -transform.up, out CornersHit[1], HoverAmount * 2))
-        {
-            BoolCornerHit[1] = (CornersHit[1].transform.gameObject.tag.CompareTo("Ground") == 0);
-        }
-        else
-        {
-            BoolCornerHit[1] = false;
-        }
-        if (Physics.Raycast(MeshPosition + Right + -Forward, -transform.up, out CornersHit[2], HoverAmount * 2))
-        {
-            BoolCornerHit[2] = (CornersHit[2].transform.gameObject.tag.CompareTo("Ground") == 0);
-        }
-        else
-        {
-            BoolCornerHit[2] = false;
-        }
-        if (Physics.Raycast(MeshPosition + -Right + -Forward, -transform.up, out CornersHit[3], HoverAmount * 2))
-        {
-            BoolCornerHit[3] = (CornersHit[3].transform.gameObject.tag.CompareTo("Ground") == 0);
-        }
-        else
-        {
-            BoolCornerHit[3] = false;
-        }
+        BoolCornerHit[0] = Physics.Raycast(MeshPosition + Right + Forward, -transform.up, out CornersHit[0], HoverAmount * 2) 
+            ? (CornersHit[0].transform.gameObject.tag.CompareTo("Ground") == 0) : false;
+
+        BoolCornerHit[1] = Physics.Raycast(MeshPosition + -Right + Forward, -transform.up, out CornersHit[1], HoverAmount * 2)
+            ? (CornersHit[1].transform.gameObject.tag.CompareTo("Ground") == 0) : false;
+
+        BoolCornerHit[2] = Physics.Raycast(MeshPosition + Right + -Forward, -transform.up, out CornersHit[2], HoverAmount * 2)
+            ? (CornersHit[2].transform.gameObject.tag.CompareTo("Ground") == 0) : false;
+
+        BoolCornerHit[3] = Physics.Raycast(MeshPosition + -Right + -Forward, -transform.up, out CornersHit[3], HoverAmount * 2)
+            ? (CornersHit[3].transform.gameObject.tag.CompareTo("Ground") == 0) : false;
     }
 
     void CheckForRespawn()
@@ -380,7 +360,7 @@ public class VehiclePhysics : MonoBehaviour
         }
         Debug.DrawRay(transform.position, -Vector3.up * 1 * MeshOfVehicle.transform.localScale.y, Color.red);
     }
-    void RespawnUser()
+    public void RespawnUser()
     {
         if(Respawn)
         {
