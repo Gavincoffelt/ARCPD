@@ -63,7 +63,7 @@ public class VehiclePhysics : MonoBehaviour
     [Header("Car Children")]
     public GameObject MeshOfVehicle;
     #endregion
-
+    
     #region Car Animations
     [Header("Animation")]
     Animator MyAnim;
@@ -75,7 +75,7 @@ public class VehiclePhysics : MonoBehaviour
     GameObject MainCamera;
     GameObject CameraLocation;
     #endregion
-
+    public int curlap = 1;
     void Start ()
     {
         MainCamera = GameObject.Find("Camera");
@@ -115,7 +115,9 @@ public class VehiclePhysics : MonoBehaviour
         CheckForRespawn();
 
         if (HitCheckpoint())
+        {
             print("Hit Checkpoint");
+        }
 
         DebugRays();
 	}
@@ -317,12 +319,14 @@ public class VehiclePhysics : MonoBehaviour
 
     public GameObject HitCheckpoint()
     {
+        
         string CheckPoint = "CheckPoint";
         if ((Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up + MeshOfVehicle.transform.forward, out hit, .1f) &&
             hit.transform.tag.CompareTo(CheckPoint) == 0) ||
             Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up + -MeshOfVehicle.transform.forward, out hit, .1f) &&
             hit.transform.tag.CompareTo(CheckPoint) == 0)
         {
+            if (curlap <= 3) { curlap += 1; }
             hit.transform.gameObject.SetActive(false);
             return hit.transform.gameObject;
         }
