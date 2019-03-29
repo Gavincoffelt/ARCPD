@@ -114,10 +114,8 @@ public class VehiclePhysics : MonoBehaviour
         TempBringCamera();
         CheckForRespawn();
 
-        GameObject temp = HitCheckpoint();
-        if (temp)
-            Destroy(temp);
 
+        KeyboardControls();
         DebugRays();
 	}
 
@@ -204,7 +202,7 @@ public class VehiclePhysics : MonoBehaviour
             //print(AngleBtwn);
             //if (AngleBtwn < 70)
             //{
-            //    Direction -= Time.deltaTime * (AngleBtwn / 100);
+            //    MoveDirection -= Time.deltaTime * (AngleBtwn / 100);
             //}
         }
         else
@@ -449,6 +447,25 @@ public class VehiclePhysics : MonoBehaviour
         #endregion
     }
 
-    
+    void KeyboardControls()
+    {
+        if(Input.GetKey(KeyCode.W))
+        {
+            MovementDirection += Time.deltaTime;
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            MovementDirection -= Time.deltaTime;
+        }
+
+        if(Input.GetKey(KeyCode.A))
+        {
+            MovementTurn -= Time.deltaTime;
+        }
+        else if(Input.GetKey(KeyCode.D))
+        {
+            MovementTurn += Time.deltaTime;
+        }
+    }
 
 }

@@ -5,15 +5,15 @@ using UnityEngine;
 public class Gyro : MonoBehaviour {
     VehiclePhysics PlayerPhysics;
     private GameObject player;
-    private GameObject gas;
-    private GameObject reverse;
+    //private GameObject gas;
+    //private GameObject reverse;
 
     // Use this for initialization
     void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
         PlayerPhysics = player.GetComponent<VehiclePhysics>();
-        gas = GameObject.Find("Gas");
-        reverse = GameObject.Find("Reverse");
+        //gas = GameObject.Find("Gas");
+        //reverse = GameObject.Find("Reverse");
 
         Input.gyro.enabled = true;
 	}
