@@ -186,9 +186,13 @@ public class VehiclePhysics : MonoBehaviour
         transform.position += GetForwardVector() * Direction * Time.deltaTime * Speed;
         if (Grounded)
         {
-            if (Direction != 0)
+            if (Direction > 0)
             {
                 transform.Rotate(new Vector3(0, MovementTurn * Time.deltaTime * Mathf.Abs(Direction) * 2, 0));
+            }
+            else if (Direction < 0)
+            {
+                transform.Rotate(new Vector3(0, -MovementTurn * Time.deltaTime * Mathf.Abs(Direction) * 2, 0));
             }
             else
             {
