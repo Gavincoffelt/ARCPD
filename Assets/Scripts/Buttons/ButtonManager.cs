@@ -11,7 +11,8 @@ public class ButtonManager : MonoBehaviour {
 
 
     public GameObject Selection;
-
+    public bool ARTog = false;
+    private string Map;
     private Dropdown fun;
     
     // Use this for initialization
@@ -23,25 +24,47 @@ public class ButtonManager : MonoBehaviour {
 
     public void StartGame()
     {
-        SceneManager.LoadScene("ARcore rewrite", LoadSceneMode.Single);        
+        ChangeSelected();
+        SceneManager.LoadScene(Map, LoadSceneMode.Single);        
     }
     public void ChangeSelected()
     {
-
-        switch (fun.value)
+        if (ARTog)
         {
-            case 0:
-                Selection = Option1;
-                break;
-            case 1:
-                Selection = Option2;
-                break;
-            case 2:
-                Selection = Option3;
-                break;
-            default:
-                Selection = Option1;
-                break;
+            switch (fun.value)
+            {
+                case 0:
+                    Selection = Option1;
+                    break;
+                case 1:
+                    Selection = Option2;
+                    break;
+                case 2:
+                    Selection = Option3;
+                    break;
+                default:
+                    Selection = Option1;
+                    break;
+            }
+            Map = "ARcore rewrite";
+        }
+        else
+        {
+            switch (fun.value)
+            {
+                case 0:
+                    Map = "Main";
+                    break;
+                case 1:
+                    Map = "GavinTestScene";
+                    break;
+                case 2:
+                    Map = "ARcore rewrite";
+                    break;
+                default:
+                    Map = "Main";
+                    break;
+            }
         }
     }
 
@@ -50,5 +73,15 @@ public class ButtonManager : MonoBehaviour {
         Application.Quit();
     }
 
-
+    public void AR()
+    {
+        if (!ARTog)
+        {
+            ARTog = true;
+        }
+        else
+        {
+            ARTog = false;
+        }
+    }
 }
