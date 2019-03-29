@@ -24,13 +24,19 @@ public class UIButtons : MonoBehaviour
 
     void Update()
     {
+        if(!PlayerPhysics)
+        {
+            Debug.LogError("The Cube returns!");
+        }
+
+
         if (PlayerPhysics.Grounded && ((GasPressed && !PlayerPhysics.CrashedFromFront) || (ReversePressed && !PlayerPhysics.CrashedFromBack)))
         {
             PlayerPhysics.MovementDirection += Speed * Time.deltaTime;
         }
         else if(PlayerPhysics.MovementDirection != 0 && PlayerPhysics.Grounded)
         {
-                PlayerPhysics.SlowVehicleDown();
+            PlayerPhysics.SlowVehicleDown();
         }
     }
 
