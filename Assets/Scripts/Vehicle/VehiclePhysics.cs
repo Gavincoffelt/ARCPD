@@ -46,7 +46,7 @@ public class VehiclePhysics : MonoBehaviour
 
     int StarterDamage;
     int[] Parts = new int[6];
-    public enum Part {FrontLeft, Front, FrontRight, BackLeft, Back, BackRight};
+    public enum Part { FrontLeft, Front, FrontRight, BackLeft, Back, BackRight };
     #endregion
 
     #region Car Physics
@@ -75,7 +75,7 @@ public class VehiclePhysics : MonoBehaviour
     #region Car Animations
     [Header("Animation")]
     Animator MyAnim;
-    enum ANIMATESTATES { IDLE, LeftTurn, RightTurn};
+    enum ANIMATESTATES { IDLE, LeftTurn, RightTurn };
     #endregion
 
     #region CameraInfo
@@ -83,9 +83,9 @@ public class VehiclePhysics : MonoBehaviour
     GameObject MainCamera;
     GameObject CameraLocation;
     #endregion
-    
+
     #region MultipleVehicleInfo
-    public enum Vehicles { Car1, Car2, Car3}
+    public enum Vehicles { Car1, Car2, Car3 }
 
     [Header("Specific Car")]
     GameManager Manager;
@@ -113,7 +113,7 @@ public class VehiclePhysics : MonoBehaviour
     }
     #endregion
 
-    void Start ()
+    void Start()
     {
         MainCamera = GameObject.Find("Camera");
         CameraLocation = GameObject.Find("CameraMoveTo");
@@ -122,7 +122,7 @@ public class VehiclePhysics : MonoBehaviour
 
         VehicleStatsSetter();
         InitVehicleMeshList();
-        
+
         #region Display Started
         Displays[0] = GameObject.Find("FL").GetComponent<Image>();
         Displays[1] = GameObject.Find("F").GetComponent<Image>();
@@ -143,9 +143,9 @@ public class VehiclePhysics : MonoBehaviour
         Speed *= transform.parent.transform.localScale.x;
         print("Respawned");
         RespawnUser();
-	}
-	
-	void Update ()
+    }
+
+    void Update()
     {
         if (!MeshOfVehicle)
             return;
@@ -170,14 +170,14 @@ public class VehiclePhysics : MonoBehaviour
 
         KeyboardControls();
         DebugRays();
-	}
+    }
 
     public void InitVehicleMeshList()
     {
         Transform[] Children = this.GetComponentsInChildren<Transform>();
-        for(int i = 0; i < Children.Length; i++)
+        for (int i = 0; i < Children.Length; i++)
         {
-            if(Children[i].tag.CompareTo("Mesh") == 0)
+            if (Children[i].tag.CompareTo("Mesh") == 0)
             {
                 VehicleMeshes.Add(Children[i].gameObject);
                 Children[i].gameObject.SetActive(false);
@@ -189,7 +189,7 @@ public class VehiclePhysics : MonoBehaviour
     void VehicleStatsSetter()
     {
         VehicleType = (Vehicles)Manager.VehicleType;
-        switch(VehicleType)
+        switch (VehicleType)
         {
             default:
             case Vehicles.Car1:
@@ -209,7 +209,7 @@ public class VehiclePhysics : MonoBehaviour
                 SetSpeed = 3;
                 break;
         }
-        
+
     }
     bool FindAndSetMesh(Vehicles VehicleType)
     {
@@ -233,7 +233,7 @@ public class VehiclePhysics : MonoBehaviour
 
     void ApplyGravity()
     {
-        if(!Grounded)//Not on the ground
+        if (!Grounded)//Not on the ground
         {
             if (Direction < 0)//not in motion
             {
@@ -260,7 +260,7 @@ public class VehiclePhysics : MonoBehaviour
                     {
                         transform.position = hit.point + transform.up * HoverAmount;
                     }
-                    if(!Grounded)
+                    if (!Grounded)
                     {
                         Quaternion NewRot = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, -hit.transform.eulerAngles.z);
                         transform.rotation = NewRot;
@@ -316,7 +316,7 @@ public class VehiclePhysics : MonoBehaviour
     }
     void CorrectMeshAngle()
     {
-        if(MeshOfVehicle)
+        if (MeshOfVehicle)
         {
             //--------------------------------------------------
             //TODO: 
@@ -340,7 +340,7 @@ public class VehiclePhysics : MonoBehaviour
     }
     bool CheckForCrashFromFront()
     {
-        if(!MeshOfVehicle)
+        if (!MeshOfVehicle)
             return false;
         bool[] threeHits = new bool[3];
 
@@ -352,11 +352,11 @@ public class VehiclePhysics : MonoBehaviour
         threeHits[2] = Physics.Raycast(StartRay, GetForwardVector() + MeshOfVehicle.transform.right * .75f, out hit, .1f) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0;
         threeHits[0] = Physics.Raycast(StartRay, GetForwardVector() + -MeshOfVehicle.transform.right * .75f, out hit, .1f) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0;
 
-        if(threeHits[0] || threeHits[1] || threeHits[2])
+        if (threeHits[0] || threeHits[1] || threeHits[2])
         {
-            if(Mathf.Abs(Direction * Speed) > MinHitSpeed || (!Grounded && Mathf.Abs(Direction * Speed) > MinHitSpeed / 4))
+            if (Mathf.Abs(Direction * Speed) > MinHitSpeed || (!Grounded && Mathf.Abs(Direction * Speed) > MinHitSpeed / 4))
             {
-                for(int i = 0; i < 3; i++)
+                for (int i = 0; i < 3; i++)
                 {
                     if (threeHits[i])
                     {
@@ -369,7 +369,7 @@ public class VehiclePhysics : MonoBehaviour
                         {
                             DamagePart((Part)i, (int)((Mathf.Abs(Direction * Speed) - MinHitSpeed / 4) * DamageMultiplier));
                         }
-                        if(CheckPart((Part)i) > 75)
+                        if (CheckPart((Part)i) > 75)
                             print("(GREEN)" + (Part)i + ": " + CheckPart((Part)i));
                         if (CheckPart((Part)i) < 75 && CheckPart((Part)i) > 50)
                             print("(YELLOW)" + (Part)i + ": " + CheckPart((Part)i));
@@ -378,7 +378,7 @@ public class VehiclePhysics : MonoBehaviour
                     }
                 }
             }
-            if(Direction > 0)
+            if (Direction > 0)
                 Direction = 0;
         }
 
@@ -442,9 +442,9 @@ public class VehiclePhysics : MonoBehaviour
         RaycastHit hit;
 
         //Checks the up of the player
-        if(Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up, out hit, .1f))
+        if (Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up, out hit, .1f))
         {
-            if(Mathf.Abs(transform.rotation.x) > 0.1f || Mathf.Abs(transform.rotation.z) > 0.1f)
+            if (Mathf.Abs(transform.rotation.x) > 0.1f || Mathf.Abs(transform.rotation.z) > 0.1f)
             {
                 Grounded = true;
                 RespawnUser(transform.position + new Vector3(0, 1, 0));
@@ -488,9 +488,9 @@ public class VehiclePhysics : MonoBehaviour
             }
         }
         return false;
-        
+
         JumpPos:
-        if(hit.transform.gameObject.tag.CompareTo("CheckPoint") == 0)
+        if (hit.transform.gameObject.tag.CompareTo("CheckPoint") == 0)
         {
             return false;
         }
@@ -526,7 +526,7 @@ public class VehiclePhysics : MonoBehaviour
         Vector3 Forward = MeshOfVehicle.transform.forward * transform.localScale.y;
         Vector3 MeshPosition = MeshOfVehicle.transform.position;
 
-        BoolCornerHit[0] = Physics.Raycast(MeshPosition + Right + Forward, -transform.up, out CornersHit[0], HoverAmount * 2) 
+        BoolCornerHit[0] = Physics.Raycast(MeshPosition + Right + Forward, -transform.up, out CornersHit[0], HoverAmount * 2)
             ? (CornersHit[0].transform.gameObject.tag.CompareTo("Ground") == 0) : false;
 
         BoolCornerHit[1] = Physics.Raycast(MeshPosition + -Right + Forward, -transform.up, out CornersHit[1], HoverAmount * 2)
@@ -542,7 +542,7 @@ public class VehiclePhysics : MonoBehaviour
     void CheckForRespawn()
     {
         RaycastHit TempHit;
-        if(Physics.Raycast(transform.position, -Vector3.up, out TempHit, MeshOfVehicle.transform.localScale.y))
+        if (Physics.Raycast(transform.position, -Vector3.up, out TempHit, MeshOfVehicle.transform.localScale.y))
         {
             if ((hit.transform && hit.transform.gameObject.tag.CompareTo("Respawn") == 0))
             {
@@ -553,7 +553,7 @@ public class VehiclePhysics : MonoBehaviour
     }
     public void RespawnUser()
     {
-        if(Respawn)
+        if (Respawn)
         {
             transform.position = Respawn.transform.position;
             //transform.LookAt(Respawn.transform.forward);
@@ -574,11 +574,11 @@ public class VehiclePhysics : MonoBehaviour
     }
     int ReportDamageLevel(Part PartType)
     {
-        if(CheckPart(PartType) >= 75)
+        if (CheckPart(PartType) >= 75)
         {
             return 1;
         }
-        else if(CheckPart(PartType) < 75 && CheckPart(PartType) > 50)
+        else if (CheckPart(PartType) < 75 && CheckPart(PartType) > 50)
         {
             return 2;
         }
@@ -595,7 +595,7 @@ public class VehiclePhysics : MonoBehaviour
     }
     void ResetParts()
     {
-        for(int i = 0; i < Parts.Length; i++)
+        for (int i = 0; i < Parts.Length; i++)
         {
             Parts[i] = StarterDamage;
         }
@@ -603,10 +603,10 @@ public class VehiclePhysics : MonoBehaviour
 
     void UpdatePartDisplay()
     {
-        for(int i = 0; i < Parts.Length; i++)
+        for (int i = 0; i < Parts.Length; i++)
         {
             int DamageLevel = ReportDamageLevel((Part)i);
-            if(DamageLevel == 1)
+            if (DamageLevel == 1)
             {
                 Displays[i].color = Color.green;
             }
