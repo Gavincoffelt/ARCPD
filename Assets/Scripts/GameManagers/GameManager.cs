@@ -2,15 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
+    
+    public int VehicleType;
+    public bool SelectionScreen;
+    public static GameManager Instance = null;
 
-	// Use this for initialization
-	void Start () {
+    void Start ()
+    {
         DontDestroyOnLoad(this);
+
+        //Singleton
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+        else if(Instance != null)
+        {
+            Destroy(this);
+        }
+
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
+
+	void Update ()
+    {
+
 	}
 }

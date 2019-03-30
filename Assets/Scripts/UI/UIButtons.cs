@@ -6,14 +6,23 @@ using UnityEngine.UI;
 
 public class UIButtons : MonoBehaviour
 {
+    #region PlayerData
     GameObject Player;
     VehiclePhysics PlayerPhysics;
+    #endregion
 
+    #region NotNeeded
     public GameObject Stick;
+    #endregion
 
+    #region Movement Checks
     bool GasPressed;
     bool ReversePressed;
+    #endregion
+
+    #region Modifiers
     int Speed = 1;
+    #endregion
 
     void Start()
     {
