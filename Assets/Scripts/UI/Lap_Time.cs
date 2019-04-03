@@ -49,7 +49,7 @@ public class Lap_Time : MonoBehaviour {
 
         if (gameObject.tag == "Player")
         {
-             curlap = Playerphysics.curlap;
+             //curlap = Playerphysics.curlap;
             laptext.text = curlap.ToString() + "/" + totallap.ToString();
         }
     }

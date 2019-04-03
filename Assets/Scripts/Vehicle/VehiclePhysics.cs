@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using GoogleARCore;
-using GoogleARCore.Examples.Common;
 using UnityEngine.UI;
 
 //Note to self, should have made a physics script and a movement script and a collision script all in serperate scripts
@@ -310,7 +308,12 @@ public class VehiclePhysics : MonoBehaviour
         }
         else
         {
-            transform.Rotate(new Vector3(Mathf.Abs(GetForwardVector().x), 0, -Mathf.Abs(GetForwardVector().z)) * 0.4f);
+            Vector3 RotateAngle = new Vector3(Mathf.Abs(GetForwardVector().z), 0, Mathf.Abs(GetForwardVector().x)) * 0.4f;
+            RotateAngle *= Direction < 0 ? -1 : 1;
+            //if (transform.rotation.z < 120 && transform.rotation.x < 120)
+            //{
+            //    transform.Rotate(RotateAngle);
+            //}
             SlowVehicleDown();
         }
     }

@@ -30,7 +30,7 @@ public class VehicleSelectionPhysics : MonoBehaviour
     #endregion
 
 
-    void Start ()
+    void Start()
     {
         MyAnim = GetComponent<Animator>();
         Manager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
@@ -39,15 +39,15 @@ public class VehicleSelectionPhysics : MonoBehaviour
         Animate(ANIMATESTATES.IDLE);
         InitVehicleMeshList();
         RespawnUser();
-	}
-	
-	void Update ()
+    }
+
+    void Update()
     {
         ApplyGravity();
         Grounded = CheckGrounded();
         Spin();
         Logic();
-	}
+    }
 
 
     void Logic()
@@ -79,14 +79,14 @@ public class VehicleSelectionPhysics : MonoBehaviour
             RespawnUser();
         }
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Play();
         }
     }
     void Spin()
     {
-        transform.Rotate(new Vector3(0,SpinSpeed * Time.deltaTime,0));
+        transform.Rotate(new Vector3(0, SpinSpeed * Time.deltaTime, 0));
     }
     bool CheckGrounded()
     {
@@ -131,7 +131,7 @@ public class VehicleSelectionPhysics : MonoBehaviour
     }
     bool FindAndSetMesh(Vehicles VehicleType)
     {
-        for(int i = 0; i < VehicleMeshes.Count; i++)
+        for (int i = 0; i < VehicleMeshes.Count; i++)
         {
             VehicleMeshes[i].SetActive(false);
         }
@@ -157,6 +157,7 @@ public class VehicleSelectionPhysics : MonoBehaviour
         if (Respawn)
         {
             transform.position = Respawn.transform.position;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
             //transform.LookAt(Respawn.transform.forward);
         }
     }
@@ -165,8 +166,34 @@ public class VehicleSelectionPhysics : MonoBehaviour
         MyAnim.SetInteger("AnimateNum", (int)CurrentState);
     }
 
-    void Play()
+    public void Play()
     {
         SceneManager.LoadScene("Main");
+    }
+    public void Right()
+    {
+        if (Manager.VehicleType + 1 == VehicleMeshes.Count)
+        {
+            Manager.VehicleType = 0;
+        }
+        else
+        {
+            Manager.VehicleType++;
+        }
+        FindAndSetMesh((Vehicles)Manager.VehicleType);
+        RespawnUser();
+    }
+    public void Left()
+    {
+        if (Manager.VehicleType - 1 == -1)
+        {
+            Manager.VehicleType = VehicleMeshes.Count - 1;
+        }
+        else
+        {
+            Manager.VehicleType--;
+        }
+        FindAndSetMesh((Vehicles)Manager.VehicleType);
+        RespawnUser();
     }
 }
