@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
         }
         else if(Instance != null)
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
         #endregion
     }

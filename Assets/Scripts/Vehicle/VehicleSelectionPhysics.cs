@@ -101,10 +101,10 @@ public class VehicleSelectionPhysics : MonoBehaviour
     void UpdateStatDisplay()
     {
         VclStat CurrentStats = MainVehicleSet.GetCurrentVehicle(Manager.VehicleType);
-        StatDisplayers[0].GetComponent<Text>().text = "Starting Health: " + CurrentStats.SetStarterDamage.ToString();
-        StatDisplayers[1].GetComponent<Text>().text = "Starting Speed: " + CurrentStats.SetSpeed.ToString();
-        StatDisplayers[2].GetComponent<Text>().text = "Starting Hover: " + CurrentStats.SetHover.ToString();
-        StatDisplayers[3].GetComponent<Text>().text = "Starting Gravity: " + CurrentStats.GravityModifier.ToString();
+        StatDisplayers[0].GetComponent<Text>().text = "Health: " + CurrentStats.SetStarterDamage.ToString();
+        StatDisplayers[1].GetComponent<Text>().text = "Speed: " + CurrentStats.SetSpeed.ToString();
+        StatDisplayers[2].GetComponent<Text>().text = "Hover: " + CurrentStats.SetHover.ToString();
+        StatDisplayers[3].GetComponent<Text>().text = "Gravity: " + CurrentStats.GravityModifier.ToString();
     }
 
     void KeyboardControls()
