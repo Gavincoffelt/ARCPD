@@ -5,12 +5,15 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ButtonManager : MonoBehaviour {
+    public static ButtonManager Instance = null;
+
     public GameObject Option1;
     public GameObject Option2;
     public GameObject Option3;
     public GameObject Option4;
     public GameObject Option5;
     public GameObject Selection;
+    public string MapName;
 
     //private Image bob;
     //public Sprite Img1;
@@ -27,11 +30,26 @@ public class ButtonManager : MonoBehaviour {
     private string Map;
     private Dropdown fun;
     private Toggle Tog;
-    
+
     // Use this for initialization
+    private void Awake()
+    {
+         #region Singleton
+        DontDestroyOnLoad(this);
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance != null)
+        {
+            Destroy(gameObject);
+        }
+        #endregion
+    }
     void Start ()
     {
-        DontDestroyOnLoad(this);
+       
+        
         fun = GameObject.Find("MapComboBox").GetComponent<Dropdown>();
         //bob = GameObject.Find("MapImage").GetComponent<Image>();
         //bob.sprite = Img1;
@@ -39,8 +57,8 @@ public class ButtonManager : MonoBehaviour {
 
     public void StartGame()
     {
-        ChangeSelected();
-        SceneManager.LoadScene(Map, LoadSceneMode.Single);        
+       // ChangeSelected();
+        SceneManager.LoadScene("MapSelection", LoadSceneMode.Single);        
     }
     public void ChangeSelected()
     {

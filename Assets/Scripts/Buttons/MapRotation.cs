@@ -13,11 +13,16 @@ public class MapRotation : MonoBehaviour {
     private GameObject Current;
 
     private Dropdown fun;
+    private Text NotFun;
+    private ButtonManager butt;
     // Use this for initialization
     void Start ()
     {
-        fun = GameObject.Find("MapComboBox").GetComponent<Dropdown>();
         Current = Option1;
+        fun = GameObject.Find("MapComboBox").GetComponent<Dropdown>();
+        butt = GameObject.Find("Butooon").GetComponent<ButtonManager>();
+        NotFun = fun.GetComponentInChildren<Text>();
+        butt.MapName = NotFun.text;
     }
 	
 	// Update is called once per frame
@@ -36,21 +41,23 @@ public class MapRotation : MonoBehaviour {
                 Current = Option1;
                 break;
             case 1:
+              
                 Current = Option2;
                 break;
             case 2:
+               
                 Current = Option3;
                 break;
             case 3:
+                
                 Current = Option4;
                 break;
-            //case 4:
-            //    Current = Option5;
-            //    break;
             default:
+                
                 Current = Option1;
                 break;
         }
+        butt.MapName = NotFun.text;
         Current.SetActive(true);
     }
 }

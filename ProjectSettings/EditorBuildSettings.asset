@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/TestMenu.unity
+    guid: 0336569314bf8ee4093f039894a46176
+  - enabled: 1
+    path: Assets/Scenes/ARcore rewrite.unity
+    guid: 2544a433caeee3b4894817bf799c3c2e
+  - enabled: 1
+    path: Assets/Scenes/Main.unity
+    guid: ccd007d41f3fe4341abaeb156e501f99
+  - enabled: 1
+    path: Assets/Scenes/GavinTestScene.unity
+    guid: afb1341d48582a9489ddb7be0fda913f
+  - enabled: 1
+    path: Assets/Scenes/VehicleSelection.unity
+    guid: f3d6977a47f50a043bd43e465f26ae34
+  - enabled: 1
+    path: Assets/Scenes/MapSelection.unity
+    guid: 6aa1c585fefac254a8047ca4ba1eda5d
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/Maps/Circut.unity
+    guid: 5471b50c468081a40b15dec7a60af640
+  - enabled: 1
+    path: Assets/Scenes/Maps/Figure8.unity
+    guid: 1b01d7c25762b2343b93d30b3765917f
+  - enabled: 1
+    path: Assets/Scenes/Maps/PlayGround.unity
+    guid: 68e1b36ee8b9baf4dae40032368e6c27
+  - enabled: 1
+    path: Assets/Scenes/Maps/Basic.unity
+    guid: f56e8db60d4e1ab4aa6bdef66325c1f3
+  m_configObjects: {}

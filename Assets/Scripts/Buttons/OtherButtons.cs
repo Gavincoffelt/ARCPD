@@ -4,11 +4,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class OtherButtons : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
+    private ButtonManager butt;
+    // Use this for initialization
+    void Start () {
+        butt = GameObject.Find("Butooon").GetComponent<ButtonManager>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -17,11 +17,16 @@ public class OtherButtons : MonoBehaviour {
 
     public void Next()
     {
-        SceneManager.LoadScene("Main", LoadSceneMode.Single);
+        SceneManager.LoadScene("VehicleSelection", LoadSceneMode.Single);
     }
 
     public void Back()
     {
         SceneManager.LoadScene("TestMenu", LoadSceneMode.Single);
+    }
+
+    public void Select()
+    {
+        SceneManager.LoadScene(butt.MapName, LoadSceneMode.Single);
     }
 }
