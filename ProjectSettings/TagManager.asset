@@ -8,6 +8,9 @@ TagManager:
   - JoyStick
   - Interactable
   - CheckPoint
+  - Mesh
+  - GameManager
+  - PartSection
   layers:
   - Default
   - TransparentFX
