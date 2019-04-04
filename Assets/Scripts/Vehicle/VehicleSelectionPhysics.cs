@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class VehicleSelectionPhysics : MonoBehaviour
@@ -9,6 +10,7 @@ public class VehicleSelectionPhysics : MonoBehaviour
     public enum Vehicles { Car1, Car2, Car3 }
     public List<GameObject> VehicleMeshes = new List<GameObject>();
     public GameObject MeshOfVehicle;
+    GameObject[] StatDisplayers;
     #endregion
 
     #region Objects
@@ -29,6 +31,42 @@ public class VehicleSelectionPhysics : MonoBehaviour
     enum ANIMATESTATES { IDLE };
     #endregion
 
+    struct VclStat
+    {
+        public float SetStarterDamage;
+        public float SetSpeed;
+        public float SetHover;
+        public float GravityModifier;
+
+        public VclStat(int StarterDamage, int Speed, float Hover, int GravModifier)
+        {
+            SetStarterDamage = StarterDamage;
+            SetSpeed = Speed;
+            SetHover = Hover;
+            GravityModifier = GravModifier;
+        }
+    }
+    struct VehicleStats
+    {
+        List<VclStat> Stats;
+
+        public void Init()
+        {
+            Stats = new List<VclStat>();
+            AddVehicleStats();
+        }
+        void AddVehicleStats()
+        {
+            Stats.Add(new VclStat(100, 3, 0.1f, 2));
+            Stats.Add(new VclStat(60, 4, 0.15f, 1));
+        }
+        public VclStat GetCurrentVehicle(int Index)
+        {
+            return Stats[Index];
+        }
+    }
+
+    VehicleStats MainVehicleSet;
 
     void Start()
     {
@@ -37,17 +75,38 @@ public class VehicleSelectionPhysics : MonoBehaviour
         Respawn = GameObject.FindGameObjectWithTag("Respawn");
 
         Animate(ANIMATESTATES.IDLE);
+        MainVehicleSet.Init();
         InitVehicleMeshList();
+        InitStatDisplay();
         RespawnUser();
     }
 
     void Update()
     {
+        UpdateStatDisplay();
         ApplyGravity();
         Grounded = CheckGrounded();
         Spin();
         KeyboardControls();
     }
+
+    void InitStatDisplay()
+    {
+        StatDisplayers = new GameObject[4];
+        StatDisplayers[0] = GameObject.Find("DisplayHealth");
+        StatDisplayers[1] = GameObject.Find("DisplaySpeed");
+        StatDisplayers[2] = GameObject.Find("DisplayHover");
+        StatDisplayers[3] = GameObject.Find("DisplayGravity");
+    }
+    void UpdateStatDisplay()
+    {
+        VclStat CurrentStats = MainVehicleSet.GetCurrentVehicle(Manager.VehicleType);
+        StatDisplayers[0].GetComponent<Text>().text = "Starting Health: " + CurrentStats.SetStarterDamage.ToString();
+        StatDisplayers[1].GetComponent<Text>().text = "Starting Speed: " + CurrentStats.SetSpeed.ToString();
+        StatDisplayers[2].GetComponent<Text>().text = "Starting Hover: " + CurrentStats.SetHover.ToString();
+        StatDisplayers[3].GetComponent<Text>().text = "Starting Gravity: " + CurrentStats.GravityModifier.ToString();
+    }
+
     void KeyboardControls()
     {
         if (Input.GetKeyDown(KeyCode.D))
@@ -114,7 +173,6 @@ public class VehicleSelectionPhysics : MonoBehaviour
 
         return false;
     }
-
 
     public void InitVehicleMeshList()
     {

@@ -11,8 +11,9 @@ public class UIButtons : MonoBehaviour
     VehiclePhysics PlayerPhysics;
     #endregion
 
-    #region NotNeeded
+    #region Buttons and stick
     public GameObject Stick;
+    public GameObject ResetButton;
     #endregion
 
     #region Movement Checks
@@ -29,6 +30,7 @@ public class UIButtons : MonoBehaviour
         Player = GameObject.FindGameObjectWithTag("Player");
         PlayerPhysics = Player.GetComponent<VehiclePhysics>();
         Stick = GameObject.FindGameObjectWithTag("JoyStick");
+        ResetButton = GameObject.Find("ResetButton");
     }
     void Update()
     {
@@ -46,6 +48,7 @@ public class UIButtons : MonoBehaviour
         {
             PlayerPhysics.SlowVehicleDown();
         }
+        ResetButtonDisplay();
     }
 
     public void GasButton()
@@ -82,4 +85,12 @@ public class UIButtons : MonoBehaviour
         Stick.transform.localPosition = new Vector3(temp,temp,temp);
     }
 
+    public void ResetCarButton()
+    {
+        PlayerPhysics.RespawnButton();
+    }
+    void ResetButtonDisplay()
+    {
+        ResetButton.SetActive(PlayerPhysics.MovementDirection == 0);//Reset is only displayed when the player is not moving
+    }
 }

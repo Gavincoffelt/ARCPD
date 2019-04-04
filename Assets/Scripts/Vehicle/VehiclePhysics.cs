@@ -209,8 +209,8 @@ public class VehiclePhysics : MonoBehaviour
                 GravityModifier = 2;
                 break;
             case Vehicles.Car2:
-                SetStarterDamage = 100;
-                SetSpeed = 3;
+                SetStarterDamage = 60;
+                SetSpeed = 4;
                 SetHover = 0.15f;
                 GravityModifier = 1;
                 break;
@@ -569,6 +569,11 @@ public class VehiclePhysics : MonoBehaviour
         transform.position = NewPosition;
         transform.rotation = Quaternion.Euler(0, transform.rotation.y, 0);
     }
+    public void RespawnButton()
+    {
+        transform.position = Respawn.transform.position;
+        transform.rotation = Quaternion.Euler(0, transform.rotation.y, 0);
+    }
 
     //Parts Functions
     public int CheckPart(Part PartyType)
@@ -577,19 +582,19 @@ public class VehiclePhysics : MonoBehaviour
     }
     int ReportDamageLevel(Part PartType)
     {
-        if (CheckPart(PartType) >= 75)
+        if (CheckPart(PartType) >= StarterDamage * .75f)
         {
             return 1;
         }
-        else if (CheckPart(PartType) < 75 && CheckPart(PartType) > 50)
+        else if (CheckPart(PartType) < StarterDamage * .75f && CheckPart(PartType) > StarterDamage * .50f)
         {
             return 2;
         }
-        else if (CheckPart(PartType) <= 50)
+        else if (CheckPart(PartType) <= StarterDamage * .50f)
         {
             return 3;
         }
-        return 0;
+        return 1;
     }
     void DamagePart(Part PartType, int Damage)
     {
@@ -661,7 +666,6 @@ public class VehiclePhysics : MonoBehaviour
         }
         PartSelections[(int)part].DamageLevels[PartToBeShown].SetActive(true);
     }
-
     //End Part functions
 
 
@@ -762,7 +766,7 @@ public class VehiclePhysics : MonoBehaviour
             {
                 MovementTurn += Time.deltaTime * 100;
             }
-            else
+            else if(Input.GetKey(KeyCode.F))
             {
                 MovementTurn = 0;
             }
