@@ -30,7 +30,6 @@ public class UIButtons : MonoBehaviour
         PlayerPhysics = Player.GetComponent<VehiclePhysics>();
         Stick = GameObject.FindGameObjectWithTag("JoyStick");
     }
-
     void Update()
     {
         if(!PlayerPhysics)

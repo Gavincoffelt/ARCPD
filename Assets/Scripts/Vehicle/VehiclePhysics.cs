@@ -68,6 +68,21 @@ public class VehiclePhysics : MonoBehaviour
     #region Car Children
     [Header("Car Children")]
     public GameObject MeshOfVehicle;
+    public struct PartSection
+    {
+        public GameObject This;
+        public GameObject[] DamageLevels;
+
+        public PartSection(GameObject MainObject, GameObject perfect, GameObject damaged, GameObject destroyed)
+        {
+            DamageLevels = new GameObject[3];
+            This = MainObject;
+            DamageLevels[0] = perfect;
+            DamageLevels[1] = damaged;
+            DamageLevels[2] = destroyed;
+        }
+    }
+    public List<PartSection> PartSelections = new List<PartSection>();
     #endregion
 
     #region Car Animations
@@ -110,6 +125,7 @@ public class VehiclePhysics : MonoBehaviour
         get { return 0; }
     }
     #endregion
+
 
     void Start()
     {
@@ -155,12 +171,10 @@ public class VehiclePhysics : MonoBehaviour
         CrashedFromBack = CheckForCrashFromBack();
         CheckForCrashFromTop();
 
-        if (!Manager.SelectionScreen)
-        {
-            MoveVehicle();
-            CorrectMeshAngle();
-            TempBringCamera();
-        }
+
+        MoveVehicle();
+        CorrectMeshAngle();
+        TempBringCamera();
 
         CheckForRespawn();
 
@@ -172,16 +186,14 @@ public class VehiclePhysics : MonoBehaviour
 
     public void InitVehicleMeshList()
     {
-        Transform[] Children = this.GetComponentsInChildren<Transform>();
-        for (int i = 0; i < Children.Length; i++)
+        List<GameObject> Children = Manager.GetChildrenWithTag(gameObject, "Mesh");
+        for (int i = 0; i < Children.Count; i++)
         {
-            if (Children[i].tag.CompareTo("Mesh") == 0)
-            {
-                VehicleMeshes.Add(Children[i].gameObject);
-                Children[i].gameObject.SetActive(false);
-            }
+            VehicleMeshes.Add(Children[i].gameObject);
+            Children[i].gameObject.SetActive(false);
         }
         FindAndSetMesh(VehicleType);
+        GatherSectionsOfCar();
     }
 
     void VehicleStatsSetter()
@@ -297,23 +309,12 @@ public class VehiclePhysics : MonoBehaviour
             {
                 Animate(ANIMATESTATES.IDLE);
             }
-            //IF given more time make the gravity work when vehicle is on angles or is upsidedown
-
-            //float AngleBtwn = Mathf.Abs(Vector3.Angle(MeshOfVehicle.transform.forward, Vector3.up));
-            //print(AngleBtwn);
-            //if (AngleBtwn < 70)
-            //{
-            //    MoveDirection -= Time.deltaTime * (AngleBtwn / 100);
-            //}
         }
         else
         {
-            Vector3 RotateAngle = new Vector3(Mathf.Abs(GetForwardVector().z), 0, Mathf.Abs(GetForwardVector().x)) * 0.4f;
+            Vector3 RotateAngle = new Vector3((Mathf.Abs(GetForwardVector().z) + Mathf.Abs(GetForwardVector().x)) * 0.4f, 0, 0);
             RotateAngle *= Direction < 0 ? -1 : 1;
-            //if (transform.rotation.z < 120 && transform.rotation.x < 120)
-            //{
-            //    transform.Rotate(RotateAngle);
-            //}
+            transform.Rotate(RotateAngle, Space.Self);
             SlowVehicleDown();
         }
     }
@@ -556,10 +557,9 @@ public class VehiclePhysics : MonoBehaviour
     }
     public void RespawnUser()
     {
-        if (Respawn)
+        if (Respawn)//GameObject to set the location to
         {
             transform.position = Respawn.transform.position;
-            //transform.LookAt(Respawn.transform.forward);
             ResetParts();
             UpdatePartDisplay();
         }
@@ -621,6 +621,7 @@ public class VehiclePhysics : MonoBehaviour
             {
                 Displays[i].color = Color.red;
             }
+            DisplayDamagedParts((Part)i);
         }
     }
 
@@ -634,6 +635,33 @@ public class VehiclePhysics : MonoBehaviour
             }
         }
     }
+
+    void GatherSectionsOfCar()
+    {
+        string[] DifferentParts = { "FrontLeft", "Front", "FrontRight", "BackLeft", "Back", "BackRight" };
+        List<GameObject> ChildrenOfMesh = new List<GameObject>();
+        for(int i = 0; i < DifferentParts.Length; i++)
+        {
+            ChildrenOfMesh.Add(Manager.GetChildWithName(MeshOfVehicle, DifferentParts[i]));
+        }
+        for(int i = 0; i < ChildrenOfMesh.Count; i++)
+        {
+            GameObject Perfect = Manager.GetChildWithName(ChildrenOfMesh[i],    "Perfect" );
+            GameObject Damaged = Manager.GetChildWithName(ChildrenOfMesh[i],    "Damaged" );
+            GameObject Destroyed = Manager.GetChildWithName(ChildrenOfMesh[i], "Destroyed");
+            PartSelections.Add(new PartSection(ChildrenOfMesh[i], Perfect, Damaged, Destroyed));
+        }
+    }
+    void DisplayDamagedParts(Part part)
+    {
+        int PartToBeShown = ReportDamageLevel(part) - 1;
+        for (int i = 0; i < PartSelections[(int)part].DamageLevels.Length; i++)
+        {
+            PartSelections[(int)part].DamageLevels[i].SetActive(false);
+        }
+        PartSelections[(int)part].DamageLevels[PartToBeShown].SetActive(true);
+    }
+
     //End Part functions
 
 

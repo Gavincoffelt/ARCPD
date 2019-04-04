@@ -10,6 +10,7 @@ TagManager:
   - CheckPoint
   - Mesh
   - GameManager
+  - PartSection
   layers:
   - Default
   - TransparentFX
