@@ -46,11 +46,9 @@ public class VehicleSelectionPhysics : MonoBehaviour
         ApplyGravity();
         Grounded = CheckGrounded();
         Spin();
-        Logic();
+        KeyboardControls();
     }
-
-
-    void Logic()
+    void KeyboardControls()
     {
         if (Input.GetKeyDown(KeyCode.D))
         {
@@ -84,6 +82,7 @@ public class VehicleSelectionPhysics : MonoBehaviour
             Play();
         }
     }
+
     void Spin()
     {
         transform.Rotate(new Vector3(0, SpinSpeed * Time.deltaTime, 0));
