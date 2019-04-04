@@ -5,27 +5,60 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ButtonManager : MonoBehaviour {
+    public static ButtonManager Instance = null;
+
     public GameObject Option1;
     public GameObject Option2;
     public GameObject Option3;
-
-
+    public GameObject Option4;
+    public GameObject Option5;
     public GameObject Selection;
+    public string MapName;
+
+    //private Image bob;
+    //public Sprite Img1;
+    //public Sprite Img2;
+    //public Sprite Img3;
+    //public Sprite Img4;
+    //public Sprite Img5;
+
+
+
+
     public bool ARTog = false;
+    public bool GYTog = false;
     private string Map;
     private Dropdown fun;
-    
+    private Toggle Tog;
+
     // Use this for initialization
+    private void Awake()
+    {
+         #region Singleton
+        DontDestroyOnLoad(this);
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance != null)
+        {
+            Destroy(gameObject);
+        }
+        #endregion
+    }
     void Start ()
     {
-        DontDestroyOnLoad(this);
+       
+        
         fun = GameObject.Find("MapComboBox").GetComponent<Dropdown>();
-	}
+        //bob = GameObject.Find("MapImage").GetComponent<Image>();
+        //bob.sprite = Img1;
+    }
 
     public void StartGame()
     {
-        ChangeSelected();
-        SceneManager.LoadScene(Map, LoadSceneMode.Single);        
+       // ChangeSelected();
+        SceneManager.LoadScene("MapSelection", LoadSceneMode.Single);        
     }
     public void ChangeSelected()
     {
@@ -42,6 +75,12 @@ public class ButtonManager : MonoBehaviour {
                 case 2:
                     Selection = Option3;
                     break;
+                case 3:
+                    Selection = Option4;
+                    break;
+                case 4:
+                    Selection = Option5;
+                    break;
                 default:
                     Selection = Option1;
                     break;
@@ -53,16 +92,23 @@ public class ButtonManager : MonoBehaviour {
             switch (fun.value)
             {
                 case 0:
-                    Map = "Main";
+                    Map = "PlayGround";
+
                     break;
                 case 1:
-                    Map = "GavinTestScene";
+                    Map = "Basic";
                     break;
                 case 2:
-                    Map = "ARcore rewrite";
+                    Map = "Circut";
+                    break;
+                case 3:
+                    Map = "Jumps";
+                    break;
+                case 4:
+                    Map = "Figure8";
                     break;
                 default:
-                    Map = "Main";
+                    Map = "PlayGround";
                     break;
             }
         }
@@ -75,13 +121,22 @@ public class ButtonManager : MonoBehaviour {
 
     public void AR()
     {
-        if (!ARTog)
+        ARTog = !ARTog;
+
+        if (ARTog)
         {
-            ARTog = true;
+            Tog = GameObject.Find("GyroToggle").GetComponent<Toggle>();
+            Tog.isOn = false;
         }
-        else
+    }
+    public void GY()
+    {
+        GYTog = !GYTog;
+
+        if (GYTog)
         {
-            ARTog = false;
+            Tog = GameObject.Find("ARToggle").GetComponent<Toggle>();
+            Tog.isOn = false;
         }
     }
 }

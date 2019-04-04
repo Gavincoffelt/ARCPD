@@ -6,22 +6,32 @@ using UnityEngine.UI;
 
 public class UIButtons : MonoBehaviour
 {
+    #region PlayerData
     GameObject Player;
     VehiclePhysics PlayerPhysics;
+    #endregion
 
+    #region Buttons and stick
     public GameObject Stick;
+    public GameObject ResetButton;
+    #endregion
 
+    #region Movement Checks
     bool GasPressed;
     bool ReversePressed;
+    #endregion
+
+    #region Modifiers
     int Speed = 1;
+    #endregion
 
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         PlayerPhysics = Player.GetComponent<VehiclePhysics>();
         Stick = GameObject.FindGameObjectWithTag("JoyStick");
+        ResetButton = GameObject.Find("ResetButton");
     }
-
     void Update()
     {
         if(!PlayerPhysics)
@@ -38,6 +48,7 @@ public class UIButtons : MonoBehaviour
         {
             PlayerPhysics.SlowVehicleDown();
         }
+        ResetButtonDisplay();
     }
 
     public void GasButton()
@@ -74,4 +85,12 @@ public class UIButtons : MonoBehaviour
         Stick.transform.localPosition = new Vector3(temp,temp,temp);
     }
 
+    public void ResetCarButton()
+    {
+        PlayerPhysics.RespawnButton();
+    }
+    void ResetButtonDisplay()
+    {
+        ResetButton.SetActive(PlayerPhysics.MovementDirection == 0);//Reset is only displayed when the player is not moving
+    }
 }
