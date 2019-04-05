@@ -50,7 +50,7 @@ public class ButtonManager : MonoBehaviour {
     {
        
         
-        fun = GameObject.Find("MapComboBox").GetComponent<Dropdown>();
+        //fun = GameObject.Find("MapComboBox").GetComponent<Dropdown>();
         //bob = GameObject.Find("MapImage").GetComponent<Image>();
         //bob.sprite = Img1;
     }

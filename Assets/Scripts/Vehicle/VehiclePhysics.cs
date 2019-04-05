@@ -349,7 +349,7 @@ public class VehiclePhysics : MonoBehaviour
         bool[] threeHits = new bool[3];
 
         RaycastHit hit;
-        string CheckPoint = "Checkpoint";
+        string CheckPoint = "CheckPoint";
         Vector3 StartRay = MeshOfVehicle.transform.position + MeshOfVehicle.transform.up * transform.localScale.z;
 
         threeHits[1] = Physics.Raycast(StartRay, GetForwardVector(), out hit, .1f) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0;
@@ -398,7 +398,7 @@ public class VehiclePhysics : MonoBehaviour
         bool[] threeHits = new bool[3];
 
         RaycastHit hit;
-        string CheckPoint = "Checkpoint";
+        string CheckPoint = "CheckPoint";
         Vector3 StartRay = MeshOfVehicle.transform.position + MeshOfVehicle.transform.up * transform.localScale.z;
 
         threeHits[1] = Physics.Raycast(StartRay, -GetForwardVector(), out hit, .1f) && hit.transform.gameObject.tag.CompareTo(CheckPoint) != 0;
