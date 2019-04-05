@@ -10,11 +10,6 @@ public class OtherButtons : MonoBehaviour {
         butt = GameObject.Find("Butooon").GetComponent<ButtonManager>();
     }
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     public void Next()
     {
 
