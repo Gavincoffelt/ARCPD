@@ -181,6 +181,7 @@ public class VehiclePhysics : MonoBehaviour
         CheckForBrokenVehicle();
 
         KeyboardControls();
+        HitCheckpoint();
         DebugRays();
     }
 
@@ -519,6 +520,7 @@ public class VehiclePhysics : MonoBehaviour
             Physics.Raycast(MeshOfVehicle.transform.position, MeshOfVehicle.transform.up + -MeshOfVehicle.transform.forward, out hit, .1f) &&
             hit.transform.tag.CompareTo(CheckPoint) == 0)
         {
+            print("Hit CheckPoint");
             return hit.transform.gameObject;
         }
         return null;
@@ -560,6 +562,7 @@ public class VehiclePhysics : MonoBehaviour
         if (Respawn)//GameObject to set the location to
         {
             transform.position = Respawn.transform.position;
+            transform.LookAt(transform.position + Respawn.transform.forward, MeshOfVehicle.transform.up);
             ResetParts();
             UpdatePartDisplay();
         }
@@ -572,7 +575,7 @@ public class VehiclePhysics : MonoBehaviour
     public void RespawnButton()
     {
         transform.position = Respawn.transform.position;
-        transform.rotation = Quaternion.Euler(0, transform.rotation.y, 0);
+        transform.LookAt(transform.position + Respawn.transform.forward, MeshOfVehicle.transform.up);
     }
 
     //Parts Functions
