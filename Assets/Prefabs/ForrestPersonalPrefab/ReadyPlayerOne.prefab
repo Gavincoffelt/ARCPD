@@ -6926,7 +6926,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 1497e116f6c3eb448be9b41bf904f9a7, type: 3}
+  - {fileID: 2100000, guid: b6c9f6d4914b3fc45b635a27fa70982a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7766,7 +7766,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 8aac9e64ed0168e4a8232f67a0b32138, type: 3}
+  - {fileID: 2100000, guid: f2d584810eb41244fba015cbdeb36bfd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9096,7 +9096,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 8aac9e64ed0168e4a8232f67a0b32138, type: 3}
+  - {fileID: 2100000, guid: b6c9f6d4914b3fc45b635a27fa70982a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9411,7 +9411,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 8aac9e64ed0168e4a8232f67a0b32138, type: 3}
+  - {fileID: 2100000, guid: f2d584810eb41244fba015cbdeb36bfd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10881,7 +10881,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 8aac9e64ed0168e4a8232f67a0b32138, type: 3}
+  - {fileID: 2100000, guid: f2d584810eb41244fba015cbdeb36bfd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15056,7 +15056,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -107.6, y: 4}
+  m_AnchoredPosition: {x: -107.59961, y: 4}
   m_SizeDelta: {x: 77.3, y: 128}
   m_Pivot: {x: 1, y: 0}
 --- !u!224 &224321810320590076
@@ -15226,7 +15226,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 25, y: 25}
+  m_AnchoredPosition: {x: 75, y: 75}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 0}
 --- !u!224 &224922971238244100
