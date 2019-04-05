@@ -5,7 +5,7 @@ using UnityEngine;
 public class Chekpointstuff : MonoBehaviour {
     GameObject Checkpoint1;
     GameObject Checkpoint2;
-    GameObject Canvas;
+    VehiclePhysics hitcheck;
     int Lapcounter;
     bool Lapchange = true;
     float billy;
@@ -17,12 +17,20 @@ public class Chekpointstuff : MonoBehaviour {
 
         Checkpoint1 = GameObject.Find("Start");
         Checkpoint2 = GameObject.Find("Check2");
-        Canvas = GameObject.Find("Canvas");
+        hitcheck = GameObject.FindGameObjectWithTag("Player").GetComponent<VehiclePhysics>();
         Lapcounter = GameObject.FindGameObjectWithTag("Player").GetComponent<Lap_Time>().totallap;
     }
 
     void Update ()
     {
+        if (hitcheck.HitCheckpoint() == Checkpoint1)
+        {
+            Checkpoint1.SetActive(false);
+        }
+        if (hitcheck.HitCheckpoint() == Checkpoint2)
+        {
+            Checkpoint2.SetActive(false);
+        }
         if (curlap < Lapcounter +1)
         {
             if (Checkpoint1.activeInHierarchy == false && Checkpoint2.activeInHierarchy == false)
@@ -36,10 +44,7 @@ public class Chekpointstuff : MonoBehaviour {
                 if (Lapchange == true) { curlap = (curlap + 1); Lapchange = false; }
             }
 
-        } else
-        {
-            Canvas.SetActive(false);
-        }
+        } 
     }
     void CollisionCheck()
     {
