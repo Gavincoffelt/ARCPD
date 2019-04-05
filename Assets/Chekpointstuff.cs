@@ -18,7 +18,7 @@ public class Chekpointstuff : MonoBehaviour {
         Checkpoint1 = GameObject.Find("Start");
         Checkpoint2 = GameObject.Find("Check2");
         hitcheck = GameObject.FindGameObjectWithTag("Player").GetComponent<VehiclePhysics>();
-        Lapcounter = GameObject.FindGameObjectWithTag("Player").GetComponent<Lap_Time>().totallap;
+        Lapcounter = GameObject.Find("Butooon").GetComponent<ButtonManager>().laps;
     }
 
     void Update ()
@@ -30,8 +30,8 @@ public class Chekpointstuff : MonoBehaviour {
         if (hitcheck.HitCheckpoint() == Checkpoint2)
         {
             Checkpoint2.SetActive(false);
-        }
-        if (curlap < Lapcounter +1)
+        } 
+        if (curlap < Lapcounter +2)
         {
             if (Checkpoint1.activeInHierarchy == false && Checkpoint2.activeInHierarchy == false)
             {
@@ -41,7 +41,7 @@ public class Chekpointstuff : MonoBehaviour {
             if (Checkpoint1.activeInHierarchy == false && Checkpoint2.activeInHierarchy == true)
             {
 
-                if (Lapchange == true) { curlap = (curlap + 1); Lapchange = false; }
+                if (Lapchange == true) { ++curlap; Lapchange = false; }
             }
 
         } 
