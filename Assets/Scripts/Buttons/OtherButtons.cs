@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 
 public class OtherButtons : MonoBehaviour {
     private ButtonManager butt;
+    private Dropdown fun;
     // Use this for initialization
     void Start () {
         butt = GameObject.Find("Butooon").GetComponent<ButtonManager>();
+        fun = GameObject.Find("LapComboBox").GetComponent<Dropdown>();
     }
 	
     public void Next()
     {
-
+        butt.laps = (fun.value + 1);
         SceneManager.LoadScene("VehicleSelection", LoadSceneMode.Single);
     }
 

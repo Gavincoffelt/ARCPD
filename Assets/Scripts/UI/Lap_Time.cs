@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Lap_Time : MonoBehaviour
 {
@@ -12,16 +13,18 @@ public class Lap_Time : MonoBehaviour
     // Number Of Total Laps Playable.
     int curlap = 0;
     int lastcurlap;
-    public int totallap = 3;
+    public int totallap;
     private float[] laptimes;
     // Timer Float.
     private float jimmy = 0;
     private GameObject player;
     float fastasfrick;
-
+    private ButtonManager butt;
     void Start()
     {
-        laptimes = new float[totallap + 1];
+        butt = GameObject.Find("Butooon").GetComponent<ButtonManager>();
+        totallap = butt.laps;
+        laptimes = new float[totallap + 2];
         curlap = 0;
         lastcurlap = 0;
     }
@@ -31,11 +34,32 @@ public class Lap_Time : MonoBehaviour
         if (curlap <= totallap)
         {
             Lapcount();
-            if (curlap > 0)
-            {
+            
+        }
+        else
+        {
+            butt.Jimmy = jimmy;
+            butt.FastAsFrick = fastasfrick; 
+            SceneManager.LoadScene("EndScene", LoadSceneMode.Single);
+        }
+    }
+    void Lapcount()
+    {
+        player = GameObject.Find("Checkpointmanager");
+        curlap = player.GetComponent<Chekpointstuff>().curlap;
+        laptext.text = curlap.ToString() + "/" + totallap.ToString();
+        time.text = "Total:" + jimmy.ToString("F3");
+        prevlaps.text = "Current " + laptimes[curlap].ToString("F3");
+    
+        if(curlap > 1)
+        {
+            prevlaps.text = "Current " + laptimes[curlap].ToString("F3") + " \n" + " Fastest " + fastasfrick.ToString("F3");
+        }
+        if (curlap > 0)
+        {
                 jimmy += 1 * Time.deltaTime;
                 laptimes[curlap] += 1 * Time.deltaTime;
-            }
+        }
 
             if (lastcurlap < curlap)
             {
@@ -44,17 +68,6 @@ public class Lap_Time : MonoBehaviour
                 lastcurlap = curlap;
                 CheckForFastLap();
             }
-            time.text = jimmy.ToString("F3");
-
-        }
-    }
-    void Lapcount()
-    {
-        player = GameObject.Find("Checkpointmanager");
-        curlap = player.GetComponent<Chekpointstuff>().curlap;
-        laptext.text = curlap.ToString() + "/" + totallap.ToString();
-
-        prevlaps.text = "Current " + laptimes[curlap].ToString("F3") + " \n" + " Fastest " + fastasfrick.ToString("F3");
     }
     public void CheckForFastLap()
     {

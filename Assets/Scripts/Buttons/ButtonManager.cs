@@ -19,7 +19,11 @@ public class ButtonManager : MonoBehaviour {
     public bool ARTog = false;
     public bool GYTog = false;
 
-   
+    public int laps;
+
+    public float Jimmy;
+    public float FastAsFrick;
+
     private Toggle Tog;
 
     // Use this for initialization
