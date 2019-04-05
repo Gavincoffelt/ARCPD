@@ -1261,8 +1261,7 @@ MonoBehaviour:
   Option1: {fileID: 1819032268542536, guid: 2000ac796fbb4834aa958c1b16191044, type: 2}
   Option2: {fileID: 1108697768454374, guid: 72f4b4d9e8718654480976471c6dafe4, type: 2}
   Option3: {fileID: 1958351076598826, guid: 16b4e79f291558e449360d61394bc0f7, type: 2}
-  Option4: {fileID: 0}
-  Option5: {fileID: 1833102458891636, guid: 767911bb0bf8aa444907dbbd56b2ffb8, type: 2}
+  Option4: {fileID: 1833102458891636, guid: 767911bb0bf8aa444907dbbd56b2ffb8, type: 2}
   Selection: {fileID: 0}
   MapName: 
   ARTog: 0

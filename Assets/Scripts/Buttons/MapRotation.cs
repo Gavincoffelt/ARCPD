@@ -9,7 +9,7 @@ public class MapRotation : MonoBehaviour {
     public GameObject Option2;
     public GameObject Option3;
     public GameObject Option4;
-    //public GameObject Option5;
+
     private GameObject Current;
 
     private Dropdown fun;
@@ -39,22 +39,27 @@ public class MapRotation : MonoBehaviour {
         {
             case 0:
                 Current = Option1;
+                butt.Selection = butt.Option1;
                 break;
             case 1:
               
                 Current = Option2;
+                butt.Selection = butt.Option2;
                 break;
             case 2:
                
                 Current = Option3;
+                butt.Selection = butt.Option3;
                 break;
             case 3:
                 
                 Current = Option4;
+                butt.Selection = butt.Option4;
                 break;
             default:
                 
                 Current = Option1;
+                butt.Selection = butt.Option1;
                 break;
         }
         butt.MapName = NotFun.text;
