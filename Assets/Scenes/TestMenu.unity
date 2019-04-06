@@ -1266,6 +1266,9 @@ MonoBehaviour:
   MapName: 
   ARTog: 0
   GYTog: 0
+  laps: 0
+  Jimmy: 0
+  FastAsFrick: 0
 --- !u!4 &1903614919
 Transform:
   m_ObjectHideFlags: 0

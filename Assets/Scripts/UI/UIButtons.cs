@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/*Forrest McCarthy's Script*/
+
 public class UIButtons : MonoBehaviour
 {
     #region PlayerData

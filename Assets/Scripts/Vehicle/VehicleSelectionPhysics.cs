@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/*Forrest McCarthy's Script*/
+
 public class VehicleSelectionPhysics : MonoBehaviour
 {
     #region Vehicle Info
@@ -68,6 +70,8 @@ public class VehicleSelectionPhysics : MonoBehaviour
 
     VehicleStats MainVehicleSet;
 
+
+    public bool EndScreen;
     void Start()
     {
         MyAnim = GetComponent<Animator>();
@@ -77,13 +81,15 @@ public class VehicleSelectionPhysics : MonoBehaviour
         Animate(ANIMATESTATES.IDLE);
         MainVehicleSet.Init();
         InitVehicleMeshList();
-        InitStatDisplay();
+        if(!EndScreen)
+            InitStatDisplay();
         RespawnUser();
     }
 
     void Update()
     {
-        UpdateStatDisplay();
+        if(!EndScreen)
+            UpdateStatDisplay();
         ApplyGravity();
         Grounded = CheckGrounded();
         Spin();

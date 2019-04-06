@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*Forrest McCarthy's Script*/
+
 public class GameManager : MonoBehaviour
 {
     [System.NonSerialized]

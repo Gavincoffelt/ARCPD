@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+/*Forrest McCarthy's Script*/
 //Note to self, should have made a physics script and a movement script and a collision script all in serperate scripts
 
 public class VehiclePhysics : MonoBehaviour
