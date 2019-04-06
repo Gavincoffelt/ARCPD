@@ -8,18 +8,30 @@ using UnityEngine.UI;
 public class OtherButtons : MonoBehaviour {
     private ButtonManager butt;
     private Dropdown fun;
+    private bool funisfun = false;
     // Use this for initialization
     void Start () {
         butt = GameObject.Find("Butooon").GetComponent<ButtonManager>();
-        fun = GameObject.Find("LapComboBox").GetComponent<Dropdown>();
+        if (GameObject.Find("LapComboBox") == null)
+        {
+            funisfun = false;
+        }
+        else
+        {
+            fun = GameObject.Find("LapComboBox").GetComponent<Dropdown>();
+            funisfun = true;
+        }
     }
 	
     public void Next()
     {
+        if (funisfun)
+        {
         butt.laps = (fun.value + 1);
+        }
         SceneManager.LoadScene("VehicleSelection", LoadSceneMode.Single);
     }
-
+    
     public void Back()
     {
         ButtonManager.Instance = null;

@@ -53,7 +53,7 @@ public class Lap_Time : MonoBehaviour
     
         if(curlap > 1)
         {
-            prevlaps.text = "Current " + laptimes[curlap].ToString("F3") + " \n" + " Fastest " + fastasfrick.ToString("F3");
+            prevlaps.text = "Current " + laptimes[curlap].ToString("F3") + "\n" + "Fastest " + fastasfrick.ToString("F3");
         }
         if (curlap > 0)
         {
