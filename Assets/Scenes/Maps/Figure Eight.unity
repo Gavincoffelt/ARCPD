@@ -6833,6 +6833,14 @@ Prefab:
       propertyPath: m_Name
       value: Checkpointmanager
       objectReference: {fileID: 0}
+    - target: {fileID: 4126321976264244, guid: 767911bb0bf8aa444907dbbd56b2ffb8, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4126321976264244, guid: 767911bb0bf8aa444907dbbd56b2ffb8, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 767911bb0bf8aa444907dbbd56b2ffb8, type: 2}
   m_IsPrefabAsset: 0
@@ -15635,7 +15643,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 875592298}
   m_LocalRotation: {x: 0, y: -0.11597734, z: 0, w: 0.9932519}
-  m_LocalPosition: {x: -415.9, y: -199.363, z: -26.881}
+  m_LocalPosition: {x: -410.08, y: -199.66, z: -25.38}
   m_LocalScale: {x: 0.5891016, y: 0.5891016, z: 0.5891016}
   m_Children: []
   m_Father: {fileID: 1166452429}
