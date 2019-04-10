@@ -30,7 +30,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Maps/Circut.unity
     guid: 5471b50c468081a40b15dec7a60af640
   - enabled: 1
-    path: Assets/Scenes/Maps/Figure8.unity
+    path: Assets/Scenes/Maps/Figure Eight.unity
     guid: 1b01d7c25762b2343b93d30b3765917f
   - enabled: 1
     path: Assets/Scenes/Maps/PlayGround.unity
