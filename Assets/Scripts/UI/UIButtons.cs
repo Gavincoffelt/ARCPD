@@ -36,21 +36,24 @@ public class UIButtons : MonoBehaviour
     }
     void Update()
     {
-        if(!PlayerPhysics)
+        if (PlayerPhysics.Wrecked == false)
         {
-            Debug.LogError("The Cube returns!");
-        }
+            if (!PlayerPhysics)
+            {
+                Debug.LogError("The Cube returns!");
+            }
 
 
-        if (PlayerPhysics.Grounded && ((GasPressed && !PlayerPhysics.CrashedFromFront) || (ReversePressed && !PlayerPhysics.CrashedFromBack)))
-        {
-            PlayerPhysics.MovementDirection += Speed * Time.deltaTime;
+            if (PlayerPhysics.Grounded && ((GasPressed && !PlayerPhysics.CrashedFromFront) || (ReversePressed && !PlayerPhysics.CrashedFromBack)))
+            {
+                PlayerPhysics.MovementDirection += Speed * Time.deltaTime;
+            }
+            else if (PlayerPhysics.MovementDirection != 0 && PlayerPhysics.Grounded)
+            {
+                PlayerPhysics.SlowVehicleDown();
+            }
+            ResetButtonDisplay();
         }
-        else if(PlayerPhysics.MovementDirection != 0 && PlayerPhysics.Grounded)
-        {
-            PlayerPhysics.SlowVehicleDown();
-        }
-        ResetButtonDisplay();
     }
 
     public void GasButton()

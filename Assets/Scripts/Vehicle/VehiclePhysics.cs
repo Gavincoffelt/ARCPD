@@ -7,6 +7,12 @@ using UnityEngine.UI;
 
 public class VehiclePhysics : MonoBehaviour
 {
+    #region Wrecked Text
+    GameObject WreckedText;
+    float Timer = 0;
+    public bool Wrecked = false;
+    #endregion
+
     #region Car Misc
     GameObject Respawn;
     int Health = 100;
@@ -133,6 +139,9 @@ public class VehiclePhysics : MonoBehaviour
         CameraLocation = GameObject.Find("CameraMoveTo");
         Respawn = GameObject.Find("Respawn");
         Manager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        WreckedText = GameObject.Find("WreckedText");
+
+        WreckedText.SetActive(false);
 
         VehicleStatsSetter();
         InitVehicleMeshList();
@@ -171,8 +180,9 @@ public class VehiclePhysics : MonoBehaviour
         CrashedFromBack = CheckForCrashFromBack();
         CheckForCrashFromTop();
 
-
-        MoveVehicle();
+        WreckedCheck();
+        if(!Wrecked)
+            MoveVehicle();
         CorrectMeshAngle();
         TempBringCamera();
 
@@ -183,6 +193,21 @@ public class VehiclePhysics : MonoBehaviour
         KeyboardControls();
         HitCheckpoint();
         DebugRays();
+        
+    }
+
+    void WreckedCheck()
+    {
+        if (Timer > 0)
+        {
+            Timer -= Time.deltaTime;
+        }
+        if (Timer < 0 && WreckedText.activeInHierarchy)
+        {
+            WreckedText.SetActive(false);
+            Wrecked = false;
+            RespawnUser();
+        }
     }
 
     public void InitVehicleMeshList()
@@ -637,9 +662,11 @@ public class VehiclePhysics : MonoBehaviour
     {
         for (int i = 0; i < Parts.Length; i++)
         {
-            if (CheckPart((Part)i) <= 0)
+            if (CheckPart((Part)i) <= 0 && Timer <= 0)
             {
-                RespawnUser();
+                WreckedText.SetActive(true);
+                Wrecked = true;
+                Timer = 3;
             }
         }
     }
