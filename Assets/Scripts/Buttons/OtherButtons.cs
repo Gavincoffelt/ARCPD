@@ -50,4 +50,9 @@ public class OtherButtons : MonoBehaviour {
             SceneManager.LoadScene(butt.MapName, LoadSceneMode.Single);
         }
     }
+
+    public void VehicleBack()
+    {
+        SceneManager.LoadScene("MapSelection", LoadSceneMode.Single);
+    }
 }
