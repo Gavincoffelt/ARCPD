@@ -59,8 +59,8 @@ public class VehicleSelectionPhysics : MonoBehaviour
         }
         void AddVehicleStats()
         {
-            Stats.Add(new VclStat(100, 3, 0.1f, 2));
-            Stats.Add(new VclStat(60, 4, 0.15f, 1));
+            Stats.Add(new VclStat(200, 2, 0.1f, 2));
+            Stats.Add(new VclStat(150, 3, 0.15f, 1));
         }
         public VclStat GetCurrentVehicle(int Index)
         {
