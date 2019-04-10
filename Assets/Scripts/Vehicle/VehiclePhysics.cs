@@ -229,14 +229,14 @@ public class VehiclePhysics : MonoBehaviour
         {
             default:
             case Vehicles.Car1:
-                SetStarterDamage = 100;
-                SetSpeed = 3;
+                SetStarterDamage = 200;
+                SetSpeed = 2;
                 SetHover = 0.1f;
                 GravityModifier = 2;
                 break;
             case Vehicles.Car2:
-                SetStarterDamage = 60;
-                SetSpeed = 4;
+                SetStarterDamage = 150;
+                SetSpeed = 3;
                 SetHover = 0.15f;
                 GravityModifier = 1;
                 break;
