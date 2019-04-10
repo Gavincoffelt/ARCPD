@@ -707,7 +707,7 @@ public class VehiclePhysics : MonoBehaviour
         }
         else
         {
-            MovementDirection -= Mathf.Lerp(MovementDirection, 0, 0.01f) * Time.deltaTime * 0.5f;
+            MovementDirection -= Mathf.Lerp(MovementDirection, 0, 0.005f) * Time.deltaTime * 0.5f;
         }
         if (Mathf.Abs(MovementDirection) < 0.01f)
         {
