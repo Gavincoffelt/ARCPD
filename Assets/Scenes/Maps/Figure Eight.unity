@@ -6945,6 +6945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40e546c39b01d044924981a2e60e5ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Wrecked: 0
   Speed: 1
   GravityModifier: 1
   HoverAmount: 0.1
@@ -14277,6 +14278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40e546c39b01d044924981a2e60e5ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Wrecked: 0
   Speed: 1
   GravityModifier: 1
   HoverAmount: 0.1
@@ -25229,6 +25231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40e546c39b01d044924981a2e60e5ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Wrecked: 0
   Speed: 1
   GravityModifier: 1
   HoverAmount: 0.1
