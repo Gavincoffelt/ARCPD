@@ -202,7 +202,7 @@ public class VehiclePhysics : MonoBehaviour
         {
             Timer -= Time.deltaTime;
         }
-        if (Timer < 0 && WreckedText.activeInHierarchy)
+        if (Timer <= 0 && WreckedText.activeInHierarchy)
         {
             WreckedText.SetActive(false);
             Wrecked = false;
