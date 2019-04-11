@@ -52,24 +52,24 @@ public class ButtonManager : MonoBehaviour {
         Application.Quit();
     }
 
-    public void AR()
-    {
-        ARTog = !ARTog;
+    //public void AR()
+    //{
+    //    ARTog = !ARTog;
 
-        if (ARTog)
-        {
-            Tog = GameObject.Find("GyroToggle").GetComponent<Toggle>();
-            Tog.isOn = false;
-        }
-    }
+    //    if (ARTog)
+    //    {
+    //        Tog = GameObject.Find("GyroToggle").GetComponent<Toggle>();
+    //        Tog.isOn = false;
+    //    }
+    //}
     public void GY()
     {
         GYTog = !GYTog;
 
-        if (GYTog)
-        {
-            Tog = GameObject.Find("ARToggle").GetComponent<Toggle>();
-            Tog.isOn = false;
-        }
+        //if (GYTog)
+        //{
+        //    Tog = GameObject.Find("ARToggle").GetComponent<Toggle>();
+        //    Tog.isOn = false;
+        //}
     }
 }
