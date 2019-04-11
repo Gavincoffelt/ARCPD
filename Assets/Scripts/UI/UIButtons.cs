@@ -81,7 +81,7 @@ public class UIButtons : MonoBehaviour
     {
         PointerEventData Data = e as PointerEventData;
         Stick.transform.position = Data.position;
-        PlayerPhysics.MovementTurn = Stick.transform.localPosition.x - 100;
+        PlayerPhysics.MovementTurn = Stick.transform.localPosition.x - 50;
     }
     public void ResetJoystick(BaseEventData e)
     {
